@@ -108,6 +108,19 @@ class MainApp extends Component {
                             <Subtitle>Opis</Subtitle>
                         </InfoContainer>
                     </Form>
+
+                    <Form>
+                        <Photo>
+
+                        </Photo>
+                        <InfoContainer>
+                            <Title>Rower</Title>
+                            <Subtitle></Subtitle>
+                            <Subtitle>Kto</Subtitle>
+                            <Subtitle>Gdzie</Subtitle>
+                            <Subtitle>Opis</Subtitle>
+                        </InfoContainer>
+                    </Form>
                 </ContentContainer>
 
             </Container>
