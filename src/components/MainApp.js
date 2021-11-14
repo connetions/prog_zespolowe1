@@ -4,44 +4,64 @@ import './Login.css';
 import {auth, db} from "../firebase-config"
 import {collection, getDocs, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
 import styled from "styled-components"
+import photo from '../staticresources/assets/rower.jpg';
 
 const Container = styled.div`
     // background-color: aqua;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
+    margin: auto;
+    max-width: 800px;
+    box-sizing: border-box;
+    //text-align: center;
 `
 const LogoContainer = styled.div`
     // background-color:bisque;
-    height: 100px;
-    width: 800px;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto 80px;
+    display: flex;
+    justify-content: center;
+    
+    a {
+      color: #eee;
+      text-transform: uppercase;
+      padding: 10px;
+      background-color: #15172b;
+      border-radius: 10px;
+      z-index: 1;
+      
+      :hover {
+        cursor: pointer;
+        background-color: #123456;
+      }
+    }
+  
+  span {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    transform: translateX(45px);
+  }
 `
 const ContentContainer = styled.div`
     // background-color:darkgreen;
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 2%;
+    margin: auto;
     background-color: #15172b;
     border-radius: 20px;
     box-sizing: border-box;
-    padding: 20px 0;
-    height: 500px
+    padding: 20px;
+    //height: 500px
 `
 const Form = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
+    margin: auto auto 20px;
     background-color: #123456;
     border-radius: 20px;
     box-sizing: border-box;
-    // height: 500px;
     padding: 20px;
     width: 400px;
     height: 150px;
+    display: flex;
+
+    :last-child {
+    margin-bottom: 0;
+    }
 `
 const Title = styled.div`
     color: #eee;
@@ -58,14 +78,18 @@ const Subtitle = styled.div`
     
 `
 const Photo = styled.div`
-    float: left;
+    margin-right: 20px;
     background-color: red;
     width: 100px;
     height: 100px;
+    
+    img {
+      max-width: 100%;
+    }
 `
-const InfoContainer = styled.div`width: 100px;
-
-    float:left;
+const InfoContainer = styled.div`
+    //width: 100px;
+  
 `
 
 class MainApp extends Component {
@@ -79,17 +103,17 @@ class MainApp extends Component {
         return (
             <Container>
                 <LogoContainer>
-                    Logo<button onClick = {this.logout}> Sign Out </button>
+                    <span>Logo</span>
+                    <a onClick = {this.logout}> Sign Out </a>
                 </LogoContainer>
 
                 <ContentContainer>
                     <Form>
                         <Photo>
-
+                            <img src={photo}/>
                         </Photo>
                         <InfoContainer>
                             <Title>Rower</Title>
-                            <Subtitle></Subtitle>
                             <Subtitle>Kto</Subtitle>
                             <Subtitle>Gdzie</Subtitle>
                             <Subtitle>Opis</Subtitle>
@@ -98,11 +122,10 @@ class MainApp extends Component {
 
                     <Form>
                         <Photo>
-
+                            <img src={photo}/>
                         </Photo>
                         <InfoContainer>
                             <Title>Rower</Title>
-                            <Subtitle></Subtitle>
                             <Subtitle>Kto</Subtitle>
                             <Subtitle>Gdzie</Subtitle>
                             <Subtitle>Opis</Subtitle>
@@ -111,11 +134,10 @@ class MainApp extends Component {
 
                     <Form>
                         <Photo>
-
+                            <img src={photo}/>
                         </Photo>
                         <InfoContainer>
                             <Title>Rower</Title>
-                            <Subtitle></Subtitle>
                             <Subtitle>Kto</Subtitle>
                             <Subtitle>Gdzie</Subtitle>
                             <Subtitle>Opis</Subtitle>

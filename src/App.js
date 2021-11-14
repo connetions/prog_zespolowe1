@@ -4,6 +4,7 @@ import React, {Component} from 'react'
 import Login from "./components/Login";
 import Register from "./components/Register";
 import MainApp from "./components/MainApp";
+import Offer from "./components/Offer";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 
@@ -15,7 +16,8 @@ class App extends Component {
         <Routes>
           <Route path='/' element = { <Login /> } />
           <Route path='/register' element =  { <Register/> } />
-          <Route path='/mainapp' element = { <MainApp /> } />
+          <Route path='/mainapp' element = { <MainApp/> } />
+          <Route path='/offer' element = { <Offer/>} />
         </Routes>
       </Router>
     )
