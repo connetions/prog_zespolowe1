@@ -1,21 +1,19 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import {signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
 import './Login.css';
 import {auth} from "../firebase-config"
 import { Link } from 'react-router-dom';
 import MainApp from "./MainApp";
 import styled from "styled-components"
-import { stringLength } from '@firebase/util';
-
+import logo from '../logo.png';
 
 const Container = styled.div`
-    // background-color: aqua;
+    color: #444444;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
 `
 const LogoContainer = styled.div`
-    // background-color:bisque;
     height: 100px;
     width: 800px;
     margin-top: 20px;
@@ -23,31 +21,26 @@ const LogoContainer = styled.div`
     margin-right: auto;
 `
 const ContentContainer = styled.div`
-    // background-color:darkgreen;
     width: 800px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 2%;
 `
 const Form = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #15172b;
-    border-radius: 20px;
-    box-sizing: border-box;
-    // height: 500px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px 1px #333;
+    margin: 0 auto;
+    background-color: #DDDDDD;
     padding: 20px;
     width: 400px;
 `
 const Title = styled.div`
-    color: #eee;
     font-family: sans-serif;
     font-size: 36px;
     font-weight: 600;
     margin-top: 30px;
 `
 const Subtitle = styled.div`
-    color: #eee;
     font-family: sans-serif;
     font-size: 16px;
     font-weight: 600;
@@ -60,19 +53,22 @@ const InputContainer = styled.div`
     margin-top:15px
 ` 
 const Input = styled.input`
-    background-color: #303245;
+    background-color: #ffffff;
     border-radius: 12px;
     border: 0;
     box-sizing: border-box;
-    color: #000000;
     font-size: 18px;
     height: 100%;
     outline: 0;
     padding: 4px 20px 0;
     width: 100%;
+    &:focus{
+        border: 2px solid #27ae60;
+    }
 `
 const Button = styled.div`
-    background-color: #08d;
+    cursor: pointer;
+    background-color: #27ae60;
     border-radius: 12px;
     border: 0;
     box-sizing: border-box;
@@ -81,99 +77,93 @@ const Button = styled.div`
     font-size: 18px;
     height: 50px;
     margin-top: 16px;
-    // outline: 0;
     text-align: center;
     padding: 12px 0;
     vertical-align: middle;
-    
     width: 100%;
+    &:focus, &:hover{
+        background-color: #1a8f4b;
+    }
+
+`
+
+const Img = styled.img`
+    width: 80px;
+    margin-left:4%;
 `
 
 
 
-class Login extends Component{
+const Login = () =>{
 
-    state = {
-        loginEmail: '',
-        loginPassword: '',
-        user: {}
-    }
+    const [loginEmail, setLoginEmail] = useState();
+    const [loginPassword, setLoginPassword] = useState();
+    const [user, setUser] = useState({});
 
-    login = async () => {
+
+    const login = async () => {
         try {
-            const user = await signInWithEmailAndPassword(
-            auth,
-            this.state.loginEmail,
-            this.state.loginPassword
-            );
-            console.log(user);
-            // this.userUpdate();
+            await signInWithEmailAndPassword(
+                auth,
+                loginEmail,
+                loginPassword
+                );
         } catch (error) {
             console.log(error.message);
         }
         
     };
 
-    logout = async () => {
-        await signOut(auth)  
-    };
-
-    signup = () =>{
-
-    }
+    onAuthStateChanged(auth, (currentUser) =>{
+        setUser(currentUser)    
+    })
     
-    componentWillMount(){
-        onAuthStateChanged(auth, (currentUser) =>{
-                this.setState({user: currentUser})    
-        })
-    }
+    if(user){
+        return <MainApp />     
+    } else{
+        return (
+            <Container>
+                <LogoContainer>
+                    <Link to="/" style={{ textDecoration: 'none' }}>
+                        <Img src={logo} alt="Logo" />
+                    </Link>
+                </LogoContainer>
 
+                <ContentContainer>
+                
+                    <Form>
+                        <Title> Welcome </Title>
 
-    render(){ 
+                        <Subtitle> Let's go sign in! </Subtitle>
 
-        if(this.state.user){
-            return <MainApp />     
-        } else{
-            return (
-                <Container>
-                    <LogoContainer>
-                        Logo
-                    </LogoContainer>
-
-                    <ContentContainer>
-                    
-                        <Form>
-                            <Title> Welcome </Title>
-                            <Subtitle> Let's go sign in! </Subtitle>
-                            <InputContainer>
+                        <InputContainer>
                             <Input
-                            placeholder="Email..." 
-                                onChange = {event => this.setState({loginEmail: event.target.value})}
+                                placeholder="Email..." 
+                                onChange = {event => setLoginEmail(event.target.value)}
                             />
-                            </InputContainer>
-                            <InputContainer>
+                        </InputContainer>
+
+                        <InputContainer>
                             <Input
-                            placeholder="Password..."
-                                onChange = {event => this.setState({loginPassword: event.target.value})}
+                                placeholder="Password..." 
+                                type="password"
+                                onChange = {event => setLoginPassword(event.target.value)}
                             />
-                            </InputContainer>
+                        </InputContainer>
 
-                            <Button onClick = {this.login}> Login </Button>
-                        
+                        <Button onClick = {login}> Login </Button>
 
-                        <Subtitle> If you want join us </Subtitle>
-                        {/* {this.state.user?.email} */}
+                        <Subtitle> <hr></hr> </Subtitle>
                         
                         <Link to="/register" style={{ textDecoration: 'none' }}>
                             <Button > Sign up </Button>
                         </Link>
-                        {/* <Button onClick = {this.logout}> Sign Out </Button> */}
-                        </Form>
-                    </ContentContainer>
-                </Container>
-            )
-        }
+                    </Form>
+                </ContentContainer>
+            </Container>
+        )
     }
+    
 }
 
 export default Login

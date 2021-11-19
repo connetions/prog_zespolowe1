@@ -2,9 +2,12 @@ import React, {Component} from 'react'
 import { signOut } from '@firebase/auth';
 import './Login.css';
 import {auth, db} from "../firebase-config"
-import {collection, getDocs, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
+// import {collection, getDocs, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
 import styled from "styled-components"
 import photo from '../staticresources/assets/rower.jpg';
+import logo from '../logo.png';
+import { useLocation } from 'react-router-dom';
+
 
 const Container = styled.div`
     // background-color: aqua;
@@ -162,6 +165,10 @@ const Send = styled.a`
         color: #15172b;
     }
 `
+const Img = styled.img`
+    width: 80px;
+    margin-left:4%;
+`
 
 const BottomBar = styled.div`
     height: 80px;
@@ -212,6 +219,7 @@ class Offer extends Component {
         return (
             <Container>
                 <LogoContainer>
+                    
                     <span>Logo</span>
                     <a onClick = {this.logout}> Sign Out </a>
                 </LogoContainer>
