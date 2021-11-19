@@ -1,42 +1,32 @@
 import React, {Component} from 'react'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
+import { onAuthStateChanged, signOut } from '@firebase/auth';
 import './Login.css';
 import { auth, db } from "../firebase-config"
 import { Navigate } from 'react-router-dom';
-import { setDoc, doc} from "@firebase/firestore";
+import {collection,  addDoc, } from "@firebase/firestore";
 import styled from "styled-components"
 import { Link } from 'react-router-dom';
 import logo from '../logo.png';
 
+
 const Container = styled.div`
-    background-color: #DDDDDD;
     color: #444444;
-    margin: auto;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-`
-const LogoContainer = styled.div`
-    background-color: #444444;
-    width:100%;
-    height:10%;
-    clear:both;
-`
-const SearchBar = styled.div`
     margin-left: auto;
     margin-right: auto;
-    width:70%;
-    height:10%;
     text-align: center;
-    clear:both;
+`
+const LogoContainer = styled.div`
+    height: 100px;
+    width: 800px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
 `
 const ContentContainer = styled.div`
-    background-color:white;
-    padding-top:5%;
-    margin: auto;
-    width: 100%;
-    height: 80%;
-    clear:both;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
 `
 const Form = styled.div`
     border-radius: 4px;
@@ -79,6 +69,7 @@ const Input = styled.input`
     }
 
 `
+
 const Button = styled.div`
     cursor: pointer;
     background-color: #27ae60;
@@ -98,12 +89,27 @@ const Button = styled.div`
         background-color: #1a8f4b;
     }
 `
+const Select = styled.select`
+    background-color: #ffffff;
+    border-radius: 12px;
+    color: #757575;
+    border: 0;
+    box-sizing: border-box;
+    font-size: 18px;
+    height: 100%;
+    outline: 0;
+    padding: 4px 20px 0;
+    width: 100%;
+    &:focus{
+        border: 2px solid #27ae60;
+    }
+`
 const Img = styled.img`
     width: 80px;
     margin-left:4%;
 `
 
-class AfterRegister extends Component{
+class AfterAdd extends Component{
 
     state = {
         cnt: 5
@@ -127,8 +133,8 @@ class AfterRegister extends Component{
             
                 <ContentContainer>
                     <Form>
-                        <Title> Thank you for sing up! </Title>
-                        <Subtitle>For {this.state.cnt} second you will navigate to Login </Subtitle>
+                        <Title> Thank you for add good! </Title>
+                        <Subtitle>For {this.state.cnt} second you will navigate to Main </Subtitle>
                         {this.state.cnt === 0 && <Navigate to ='/' />}
                         </Form>
                 </ContentContainer>
@@ -138,17 +144,24 @@ class AfterRegister extends Component{
     }
 }
 
-class Register extends Component {
+class AddGoods extends Component {
 
     state = {
-        registerEmail: '',
-        registerPassword: '',
+        goodsName: '',
+        description: '',
+        photo: '',
+        where: '',
         name: '',
         surname: '',
         user: {},
         userid: '',
-        phone: '',
-        flag: false
+        flag: false,
+        voivodeshipList: ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
+                    "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
+                    "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"],
+        voivodeship: 'Dolnośląskie',
+        categoryList: ["Sport", "Electronics", "House", "Garden", "Automotive", "Kids", "Clothes", "Animals", "Music", "Education" , "Other"],
+        category: 'Sport'
     }
 
     componentWillMount(){
@@ -158,101 +171,95 @@ class Register extends Component {
         })
     }
 
-    register = async () => {
-        try{
-            const user = await createUserWithEmailAndPassword(
-                auth,
-                this.state.registerEmail,
-                this.state.registerPassword
-            );
+    addGoods = async () => {
+        try{           
             this.setState({flag: true})
-
-            // try {
-            // const docRef = await addDoc(collection(db, "users"), {
-            //     first: "Alan",
-            //     middle: "Mathison",
-            //     last: "Turing",
-            //     born: 1912
-            // });
-
-            // console.log("Document written with ID: ", docRef.id);
-            // } catch (e) {
-            // console.error("Error adding document: ", e);
-            // }
             console.log(this.state.user.uid);
-            const data = {
-                    email:this.state.registerEmail,
-                    name: this.state.name,
-                    surname: this.state.surname,
-                    phone: this.state.phone,
-                    uid: this.state.user.uid
-                }
+            try{
+                const docRef = await addDoc(collection(db, "goods"), {
+                        photo:this.state.photo,
+                        title:this.state.goodsTitle,
+                        where: this.state.where,
+                        description: this.state.description,
+                        voivodeship: this.state.voivodeship,
+                        who: this.state.user.email,
+                        category: this.state.category
+                    });
+                console.log("Document written with ID: ", docRef.id);
+            } catch (e) {
+            console.error("Error adding document: ", e);
+            }
 
-            await setDoc(doc(db, "users", this.state.user.uid), data);
-         
-            console.log(user)
         } catch (error) {
             console.log(error.message);
         }
     };
 
-
     logout = async () => {
         await signOut(auth)
-
     };
+
+    
 
     render(){
         if(this.state.flag){
-            return <AfterRegister />
+            return <AfterAdd />
         }
         else{
             return (
                 <Container>
                     <LogoContainer>
-                        <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Link to="/" style={{ textDecoration: 'none' }}>
                             <Img src={logo} alt="Logo" />
                         </Link>
-                        
                     </LogoContainer>
 
                     <ContentContainer>
                         <Form>
-                            <Title> Register User </Title>
+                            <Title> Add Good </Title>
                             <InputContainer>
-                            <Input placeholder="Email..." 
-                                onChange = {event => this.setState({registerEmail: event.target.value})}
-                            />
+                                <Input  placeholder="Photo" 
+                                    onChange = {event => this.setState({photo: event.target.files[0]})}
+                                />
                             </InputContainer>
 
                             <InputContainer>
-                            <Input placeholder="Password..."  type = "password"
-                                onChange = {event => this.setState({registerPassword: event.target.value})}
-                            />
+                                <Input placeholder="Title"  
+                                    onChange = {event => this.setState({goodsTitle: event.target.value})}
+                                />
                             </InputContainer>
 
                             <InputContainer>
-                            <Input placeholder="Name..."  
-                                onChange = {event => this.setState({name: event.target.value})}
-                            />
+                                <Select onChange = {event => this.setState({category: event.target.value})}>
+                                    {this.state.categoryList.map((category) => (
+                                    <option value={category}>{category}</option>
+                                    ))}
+                                </Select>
                             </InputContainer>
 
                             <InputContainer>
-                            <Input placeholder="Surname..."  
-                                onChange = {event => this.setState({surname: event.target.value})}
-                            />
+                                <Select onChange = {event => this.setState({voivodeship: event.target.value})}>
+                                    {this.state.voivodeshipList.map((voivodeship) => (
+                                    <option value={voivodeship}>{voivodeship}</option>
+                                    ))}
+                                </Select>
                             </InputContainer>
 
                             <InputContainer>
-                            <Input placeholder="Phone number..."  
-                                onChange = {event => this.setState({phone: event.target.value})}
-                            />
+                                <Input placeholder="Where"  
+                                    onChange = {event => this.setState({where: event.target.value})}
+                                />
                             </InputContainer>
 
-                            <Button onClick = {this.register}> Create User</Button>
-                            <Subtitle> <hr></hr> </Subtitle>
+                            <InputContainer>
+                                <Input placeholder="Description"  
+                                    onChange = {event => this.setState({description: event.target.value})}
+                                />
+                            </InputContainer>
+
+                            <Button onClick = {this.addGoods}> Add goods</Button>
                             <Link to="/" style={{ textDecoration: 'none' }}>
-                            <Button > Back to login </Button>
+                            <Button > Back to Main </Button>
                             </Link>
                        
 
@@ -267,4 +274,4 @@ class Register extends Component {
     }
 }
 
-export default Register
+export default AddGoods
