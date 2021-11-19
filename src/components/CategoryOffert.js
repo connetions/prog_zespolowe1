@@ -148,62 +148,49 @@ const Img = styled.img`
 `
 
 const Good = (props) =>{
-    
-        return(
-            <Link to={"/offer" 
-            
-            } style={{ textDecoration: 'none' }}>
-                <Form>
-                    <Photo>
-                        {props.photo}
-                    </Photo>
-                    <InfoContainer>
-                        <Title>{props.title}</Title>
-                        <Subtitle>{props.who}</Subtitle>
-                        <Subtitle>{props.where}</Subtitle>
-                    </InfoContainer>
-                </Form>
-            </Link>
-        )
-    
+    return(
+        <Link to={"/offer" 
+        
+        } style={{ textDecoration: 'none' }}>
+            <Form>
+                <Photo>
+                    {props.photo}
+                </Photo>
+                <InfoContainer>
+                    <Title>{props.title}</Title>
+                    <Subtitle>{props.who}</Subtitle>
+                    <Subtitle>{props.where}</Subtitle>
+                </InfoContainer>
+            </Form>
+        </Link>
+    )
 }
 
-
-
-const CategoryOffert = (props) =>{
-    // const location = useLocation()
+const CategoryOffert = () =>{
+    
     const { category } = useParams()
-
-    // console.log(props.location.aboutProps)
-
     const [goods, setGoods] = useState([]);
-
     const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
                 "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
                 "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"];
-
     const [voivodeship, setVoivodeship] = useState('');
     const [search, setSearch] = useState('');
     
     const goodsList = goods.map( (good) => (  
         <Good 
-        title = {good.title}
-        who = {good.who}
-        description = {good.description}
-        where = {good.where}
-        photo = {good.photo}
-        />
-        
-    ) ) 
+            title = {good.title}
+            who = {good.who}
+            description = {good.description}
+            where = {good.where}
+            photo = {good.photo}
+        />   
+    )) 
     
     const logout = async () => {
         await signOut(auth)
     
     };
     
-    // const location = useLocation()
-    // const { from } = location.state
-
     useEffect(() => {
         if(category == "All"){
             const fetchGoods = async () =>{

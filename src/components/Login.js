@@ -1,11 +1,10 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import {signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
 import './Login.css';
 import {auth} from "../firebase-config"
 import { Link } from 'react-router-dom';
 import MainApp from "./MainApp";
 import styled from "styled-components"
-// import { stringLength } from '@firebase/util';
 import logo from '../logo.png';
 
 const Container = styled.div`
@@ -95,90 +94,76 @@ const Img = styled.img`
 
 
 
-class Login extends Component{
+const Login = () =>{
 
-    state = {
-        loginEmail: '',
-        loginPassword: '',
-        user: {}
-    }
+    const [loginEmail, setLoginEmail] = useState();
+    const [loginPassword, setLoginPassword] = useState();
+    const [user, setUser] = useState({});
 
-    login = async () => {
+
+    const login = async () => {
         try {
-            const user = await signInWithEmailAndPassword(
-            auth,
-            this.state.loginEmail,
-            this.state.loginPassword
-            );
-            console.log(user);
-            // this.userUpdate();
+            await signInWithEmailAndPassword(
+                auth,
+                loginEmail,
+                loginPassword
+                );
         } catch (error) {
             console.log(error.message);
         }
         
     };
 
-    logout = async () => {
-        await signOut(auth)  
-    };
+    onAuthStateChanged(auth, (currentUser) =>{
+        setUser(currentUser)    
+    })
+    
+    if(user){
+        return <MainApp />     
+    } else{
+        return (
+            <Container>
+                <LogoContainer>
+                    <Link to="/" style={{ textDecoration: 'none' }}>
+                        <Img src={logo} alt="Logo" />
+                    </Link>
+                </LogoContainer>
 
-    signup = () =>{
+                <ContentContainer>
+                
+                    <Form>
+                        <Title> Welcome </Title>
 
+                        <Subtitle> Let's go sign in! </Subtitle>
+
+                        <InputContainer>
+                            <Input
+                                placeholder="Email..." 
+                                onChange = {event => setLoginEmail(event.target.value)}
+                            />
+                        </InputContainer>
+
+                        <InputContainer>
+                            <Input
+                                placeholder="Password..." 
+                                type="password"
+                                onChange = {event => setLoginPassword(event.target.value)}
+                            />
+                        </InputContainer>
+
+                        <Button onClick = {login}> Login </Button>
+
+                        <Subtitle> <hr></hr> </Subtitle>
+                        
+                        <Link to="/register" style={{ textDecoration: 'none' }}>
+                            <Button > Sign up </Button>
+                        </Link>
+                    </Form>
+                </ContentContainer>
+            </Container>
+        )
     }
     
-    componentWillMount(){
-        onAuthStateChanged(auth, (currentUser) =>{
-                this.setState({user: currentUser})    
-        })
-    }
-
-
-    render(){ 
-
-        if(this.state.user){
-            return <MainApp />     
-        } else{
-            return (
-                <Container>
-                    <LogoContainer>
-                    <Link to="/" style={{ textDecoration: 'none' }}>
-                            <Img src={logo} alt="Logo" />
-                        </Link>
-                    </LogoContainer>
-
-                    <ContentContainer>
-                    
-                        <Form>
-                            <Title> Welcome </Title>
-                            <Subtitle> Let's go sign in! </Subtitle>
-                            <InputContainer>
-                            <Input
-                            placeholder="Email..." 
-                                onChange = {event => this.setState({loginEmail: event.target.value})}
-                            />
-                            </InputContainer>
-                            <InputContainer>
-                            <Input
-                            placeholder="Password..." type="password"
-                                onChange = {event => this.setState({loginPassword: event.target.value})}
-                            />
-                            </InputContainer>
-
-                            <Button onClick = {this.login}> Login </Button>
-
-                            <Subtitle> <hr></hr> </Subtitle>
-                            {/* {this.state.user?.email} */}
-                            
-                            <Link to="/register" style={{ textDecoration: 'none' }}>
-                                <Button > Sign up </Button>
-                            </Link>
-                            {/* <Button onClick = {this.logout}> Sign Out </Button> */}
-                        </Form>
-                    </ContentContainer>
-                </Container>
-            )
-        }
-    }
 }
 
 export default Login

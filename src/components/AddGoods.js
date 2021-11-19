@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import { onAuthStateChanged, signOut } from '@firebase/auth';
 import './Login.css';
 import { auth, db } from "../firebase-config"
@@ -144,46 +144,39 @@ class AfterAdd extends Component{
     }
 }
 
-class AddGoods extends Component {
+const AddGoods = () =>{
 
-    state = {
-        goodsName: '',
-        description: '',
-        photo: '',
-        where: '',
-        name: '',
-        surname: '',
-        user: {},
-        userid: '',
-        flag: false,
-        voivodeshipList: ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
-                    "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
-                    "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"],
-        voivodeship: 'Dolnośląskie',
-        categoryList: ["Sport", "Electronics", "House", "Garden", "Automotive", "Kids", "Clothes", "Animals", "Music", "Education" , "Other"],
-        category: 'Sport'
-    }
-
-    componentWillMount(){
-        onAuthStateChanged(auth, (currentUser) =>{
-                this.setState({user: currentUser}) 
-                // this.setState({userid: currentUser.uid})   
-        })
-    }
-
-    addGoods = async () => {
+    const [goodsName, setGoodsName] = useState();
+    const [description, setDescription] = useState();
+    const [photo, setPhoto] = useState();
+    const [where, setWhere] = useState();
+    const [user, setUser] = useState({});
+    const [flag, setFlag] = useState(false);
+    const [category, setCategory] = useState('Sport');
+    const [voivodeship, setVoivodeship] = useState('Dolnośląskie');
+    const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
+                "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
+                "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"];
+    const categoryList = ["Sport", "Electronics", "House", "Garden", "Automotive", "Kids", "Clothes", "Animals", "Music", "Education" , "Other"];
+    
+    onAuthStateChanged(auth, (currentUser) =>{
+        setUser(currentUser) 
+    })
+    
+    const addGoods = async () => {
         try{           
-            this.setState({flag: true})
-            console.log(this.state.user.uid);
+            setFlag(true);
+            console.log(user.uid);
             try{
                 const docRef = await addDoc(collection(db, "goods"), {
-                        photo:this.state.photo,
-                        title:this.state.goodsTitle,
-                        where: this.state.where,
-                        description: this.state.description,
-                        voivodeship: this.state.voivodeship,
-                        who: this.state.user.email,
-                        category: this.state.category
+                        photo:photo,
+                        title:goodsName,
+                        where: where,
+                        description: description,
+                        voivodeship: voivodeship,
+                        who: user.email,
+                        category: category,
+                        uid:user.uid
                     });
                 console.log("Document written with ID: ", docRef.id);
             } catch (e) {
@@ -195,83 +188,86 @@ class AddGoods extends Component {
         }
     };
 
-    logout = async () => {
+    const logout = async () => {
         await signOut(auth)
     };
 
-    
-
-    render(){
-        if(this.state.flag){
-            return <AfterAdd />
-        }
-        else{
-            return (
-                <Container>
-                    <LogoContainer>
-                    <Link to="/" style={{ textDecoration: 'none' }}>
-                            <Img src={logo} alt="Logo" />
-                        </Link>
-                    </LogoContainer>
-
-                    <ContentContainer>
-                        <Form>
-                            <Title> Add Good </Title>
-                            <InputContainer>
-                                <Input  placeholder="Photo" 
-                                    onChange = {event => this.setState({photo: event.target.files[0]})}
-                                />
-                            </InputContainer>
-
-                            <InputContainer>
-                                <Input placeholder="Title"  
-                                    onChange = {event => this.setState({goodsTitle: event.target.value})}
-                                />
-                            </InputContainer>
-
-                            <InputContainer>
-                                <Select onChange = {event => this.setState({category: event.target.value})}>
-                                    {this.state.categoryList.map((category) => (
-                                    <option value={category}>{category}</option>
-                                    ))}
-                                </Select>
-                            </InputContainer>
-
-                            <InputContainer>
-                                <Select onChange = {event => this.setState({voivodeship: event.target.value})}>
-                                    {this.state.voivodeshipList.map((voivodeship) => (
-                                    <option value={voivodeship}>{voivodeship}</option>
-                                    ))}
-                                </Select>
-                            </InputContainer>
-
-                            <InputContainer>
-                                <Input placeholder="Where"  
-                                    onChange = {event => this.setState({where: event.target.value})}
-                                />
-                            </InputContainer>
-
-                            <InputContainer>
-                                <Input placeholder="Description"  
-                                    onChange = {event => this.setState({description: event.target.value})}
-                                />
-                            </InputContainer>
-
-                            <Button onClick = {this.addGoods}> Add goods</Button>
-                            <Link to="/" style={{ textDecoration: 'none' }}>
-                            <Button > Back to Main </Button>
-                            </Link>
-                       
-
-                        {/* <h4> User Logged In: </h4> */}
-                        {/* {this.state.user?.email} */}
-                        {/* <button onClick = {this.logout}> Sign Out </button> */}
-                        </Form>
-                    </ContentContainer>
-                </Container>
-            )
-        }
+    if(flag){
+        return <AfterAdd />
     }
+    else{
+        return (
+            <Container>
+                <LogoContainer>
+
+                    <Link to="/" style={{ textDecoration: 'none' }}>
+                        <Img src={logo} alt="Logo" />
+                    </Link>
+
+                </LogoContainer>
+
+                <ContentContainer>
+                    <Form>
+                        <Title> Add Good </Title>
+                        
+                        <InputContainer>
+                            <Input 
+                                placeholder="Photo" 
+                                onChange = {event => setPhoto(event.target.value)}
+                            />
+                        </InputContainer>
+
+                        <InputContainer>
+                            <Input 
+                                placeholder="Title"  
+                                onChange = {event => setGoodsName(event.target.value)}
+                            />
+                        </InputContainer>
+
+                        <InputContainer>
+                            <Select 
+                                onChange = {event => setCategory(event.target.value)}>
+                                {categoryList.map((category) => (
+                                <option value={category}>{category}</option>
+                                ))}
+                            </Select>
+                        </InputContainer>
+
+                        <InputContainer>
+                            <Select 
+                                onChange = {event => setVoivodeship(event.target.value)}>
+                                {voivodeshipList.map((voivodeship) => (
+                                <option value={voivodeship}>{voivodeship}</option>
+                                ))}
+                            </Select>
+                        </InputContainer>
+
+                        <InputContainer>
+                            <Input 
+                                placeholder="Where"  
+                                onChange = {event => setWhere(event.target.value)}
+                            />
+                        </InputContainer>
+
+                        <InputContainer>
+                            <Input 
+                                placeholder="Description"  
+                                onChange = {event => setDescription(event.target.value)}
+                            />
+                        </InputContainer>
+
+                        <Button onClick = {addGoods}> Add goods</Button>
+
+                        <Link to="/" style={{ textDecoration: 'none' }}>
+                            <Button > Back to Main </Button>
+                        </Link>
+
+                    </Form>
+                </ContentContainer>
+            </Container>
+        )
+    }
+    
 }
 
 export default AddGoods

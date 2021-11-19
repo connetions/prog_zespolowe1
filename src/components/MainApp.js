@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import { signOut } from '@firebase/auth';
 import './Login.css';
 import {auth, db} from "../firebase-config"
@@ -171,115 +171,68 @@ const Img = styled.img`
     margin-left:4%;
 `
 
+const MainApp = () => {
 
-class Good extends Component{
-    render(){
-        return(
-            <Link to={"/offer" 
-            
-            } style={{ textDecoration: 'none' }}>
-                <Form>
-                    <Photo>
-                        {this.props.photo}
-                    </Photo>
-                    <InfoContainer>
-                        <Title>{this.props.title}</Title>
-                        <Subtitle>{this.props.who}</Subtitle>
-                        <Subtitle>{this.props.where}</Subtitle>
-                    </InfoContainer>
-                </Form>
-            </Link>
-        )
-    }
-}
-
-class MainApp extends Component {
-
-    state = {
-        goods: [],
-        voivodeshipList: ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
+    const [voivodeship, setVoivodeship] = useState();
+    const [search, setSearch] = useState();
+    const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
                     "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
-                    "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"],
-        voivodeship: '',
-        categoryList: ["Sport", "Electronics", "House", "Garden", "Automotive", "Kids", "Clothes", "Animals", "Music", "Education" , "All", "Other"]
-
-    }
-    
-    logout = async () => {
+                    "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"]; 
+    const categoryList = ["Sport", "Electronics", "House", "Garden", "Automotive", "Kids", "Clothes", "Animals", "Music", "Education" , "All", "Other"];
+ 
+    const logout = async () => {
         await signOut(auth)
     
     };
+   
+    return (
+        <Container>
+            <LogoContainer>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Img src={logo} alt="Logo" />
+                </Link>
 
-    fetchGoods = async () =>{
-        const querySnapshot = await getDocs(collection(db, "goods"));
-        querySnapshot.forEach((doc) => {
-            this.setState({goods: [...this.state.goods, doc.data()]})
-        console.log(doc.id, " => ", doc.data());
-        });
-    }
+                <Button onClick = {logout}> Sign Out </Button>
 
-    componentWillMount(){
-        this.fetchGoods();
-    }
+                <Link to="/addgoods" style={{ textDecoration: 'none' }}>
+                    <Button > Add Goods </Button>
+                </Link>
+            </LogoContainer>
 
-    render(){
-        return (
-            <Container>
-                <LogoContainer>
-                     <Link to="/" style={{ textDecoration: 'none' }}>
-                        <Img src={logo} alt="Logo" />
-                    </Link>
+            <SearchBar>
+                <InputContainer>
+                    <Input 
+                        placeholder="What are you looking for..." 
+                        onChange = {event => setSearch(event.target.value)}
+                    />
+                </InputContainer>
 
-                    <Button onClick = {this.logout}> Sign Out </Button>
-
-                    <Link to="/addgoods" style={{ textDecoration: 'none' }}>
-                        <Button > Add Goods </Button>
-                    </Link>
-                </LogoContainer>
-
-                <SearchBar>
-                     <InputContainer>
-                        <Input placeholder="What are you looking for..." 
-                            onChange = {event => this.setState({photo: event.target.value})}
-                        />
-                    </InputContainer>
-
-                    <InputContainer>
-                        <Select onChange = {event => this.setState({voivodeship: event.target.value})}>
-                            {this.state.voivodeshipList.map((voivodeship) => (
-                            <option value={voivodeship}>{voivodeship}</option>
-                            ))}
-                        </Select>
-                    </InputContainer>
-
-                    <Button style={{ float: 'left', width: "17%", }}> Search </Button>
-                </SearchBar>
-
-                <ContentContainer>
-                    {/* {this.state.goods.map((good) => (
-                            <Good 
-                            title = {good.title}
-                            who = {good.who}
-                            description = {good.description}
-                            where = {good.where}
-                            photo = {good.photo}
-                            />
-                        ))} */}
-
-                    <Title>Category</Title>
-                    <CategoryContainer>
-                        {this.state.categoryList.map((category) => (
-                            <Link to={{pathname:'/categoryoffert/' + category, style:{ textDecoration: 'none' }}}>
-                                <ButtonCategory > {category} </ButtonCategory>
-                            </Link>
+                <InputContainer>
+                    <Select 
+                        onChange = {event => setVoivodeship(event.target.value)}>
+                        {voivodeshipList.map((voivodeship) => (
+                        <option value={voivodeship}>{voivodeship}</option>
                         ))}
+                    </Select>
+                </InputContainer>
 
-                    </CategoryContainer>
-                </ContentContainer>
+                <Button style={{ float: 'left', width: "17%", }}> Search </Button>
+            </SearchBar>
 
-            </Container>
-        )
-    }
+            <ContentContainer>
+                <Title>Category</Title>
+
+                <CategoryContainer>
+                    {categoryList.map((category) => (
+                        <Link to={{pathname:'/categoryoffert/' + category, style:{ textDecoration: 'none' }}}>
+                            <ButtonCategory > {category} </ButtonCategory>
+                        </Link>
+                    ))}
+                </CategoryContainer>
+            </ContentContainer>
+
+        </Container>
+    )
 }
 
 export default MainApp

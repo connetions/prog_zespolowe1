@@ -6,6 +6,8 @@ import {auth, db} from "../firebase-config"
 import styled from "styled-components"
 import photo from '../staticresources/assets/rower.jpg';
 import logo from '../logo.png';
+import { useLocation } from 'react-router-dom';
+
 
 const Container = styled.div`
     // background-color: aqua;
