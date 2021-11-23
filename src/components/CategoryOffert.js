@@ -1,14 +1,11 @@
 import React, {Component, useState, useEffect} from 'react'
 import { signOut } from '@firebase/auth';
 import './Login.css';
-import {auth, db} from "../firebase-config"
+import {auth, db, app} from "../firebase-config"
 import {collection, getDocs, where, query} from "firebase/firestore";
 import styled from "styled-components"
 import logo from '../logo.png';
 import { Link, useLocation, useParams } from 'react-router-dom';
-
-
-
 
 
 const Container = styled.div`
@@ -73,7 +70,7 @@ const Photo = styled.div`
     float: left;
     background-color: red;
     width: 35%;
-    min-height: 200px;
+    max-height: 200px;
     overflow: hidden;
 `
 const InfoContainer = styled.div`
@@ -154,7 +151,7 @@ const Good = (props) =>{
         } style={{ textDecoration: 'none' }}>
             <Form>
                 <Photo>
-                    {props.photo}
+                    <img width="100%" max-height = "200px"  src={props.photo} />
                 </Photo>
                 <InfoContainer>
                     <Title>{props.title}</Title>
@@ -190,6 +187,8 @@ const CategoryOffert = () =>{
         await signOut(auth)
     
     };
+
+    
     
     useEffect(() => {
         if(category == "All"){
@@ -217,9 +216,9 @@ const CategoryOffert = () =>{
     return (
         <Container>
             <LogoContainer>
-            <Link to="/" style={{ textDecoration: 'none' }}>
-                            <Img src={logo} alt="Logo" />
-                        </Link>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Img src={logo} alt="Logo" />
+                </Link>
 
                 <Button onClick = {logout}> Sign Out </Button>
 

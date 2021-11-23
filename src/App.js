@@ -8,6 +8,7 @@ import Offer from "./components/Offer";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AddGoods from './components/AddGoods';
 import CategoryOffert from './components/CategoryOffert';
+import SearchGoods from './components/SearchGoods';
 
 class App extends Component {
   render(){
@@ -21,6 +22,7 @@ class App extends Component {
           <Route path='/offer' element = { <Offer/>} />
           <Route path='/addgoods' element = { <AddGoods/>} />
           <Route path='/categoryoffert/:category' element = { <CategoryOffert/>} />
+          <Route path='/searchgoods/:searchName/:voivodeshipName' element = { <SearchGoods/>} />
         </Routes>
       </Router>
     )
