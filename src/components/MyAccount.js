@@ -1,12 +1,52 @@
 import React, {Component, useState, useEffect} from 'react'
-import { signOut } from '@firebase/auth';
+import { signOut ,onAuthStateChanged, getAuth} from '@firebase/auth';
 import './Login.css';
-import {auth, db, app} from "../firebase-config"
+import {auth, db} from "../firebase-config"
 import {collection, getDocs, where, query} from "firebase/firestore";
 import styled from "styled-components"
 import logo from '../logo.png';
 import { Link, useLocation, useParams } from 'react-router-dom';
 
+
+const Form = styled.div`
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #123456;
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 20px;
+    width: 600px;
+    min-height: 100px;
+    overflow: hidden;
+    margin-top: 20px
+`
+
+const Title = styled.div`
+    
+    color: black;
+    text-align:center;
+    font-family: sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+`
+const Subtitle = styled.div`
+    color: #eee;
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+`
+const Photo = styled.div`
+    float: left;
+    background-color: red;
+    width: 35%;
+    min-height: 100px;
+    overflow: hidden;
+`
+const InfoContainer = styled.div`
+    width: 35%;
+    float:left;
+  
+`
 
 const Container = styled.div`
     background-color: #DDDDDD;
@@ -22,62 +62,15 @@ const LogoContainer = styled.div`
     height:10%;
     clear:both;
 `
-const SearchBar = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    width:70%;
-    height:10%;
-    text-align: center;
-    clear:both;
-`
 const ContentContainer = styled.div`
-    background-color:white;
     padding-top:5%;
+    background-color:white;
     margin: auto;
     width: 100%;
     height: 80%;
     clear:both;
 `
 
-const Form = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #DDDDDD;
-    border-radius: 20px;
-    box-sizing: border-box;
-    padding: 20px;
-    width: 80%;
-    min-height: 200px;
-    overflow: hidden;
-    margin-top: 20px
-`
-const Title = styled.div`
-    color: #444444;
-
-    text-align:center;
-    font-family: sans-serif;
-    font-size: 36px;
-    font-weight: 600;
-`
-const Subtitle = styled.div`
-    color: #444444;
-
-    font-family: sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-`
-const Photo = styled.div`
-    float: left;
-    background-color: red;
-    width: 35%;
-    max-height: 200px;
-    overflow: hidden;
-`
-const InfoContainer = styled.div`
-    width: 35%;
-    float:left;
-  
-`
 const Button = styled.div`
     margin-left:1%;
     cursor: pointer;
@@ -100,48 +93,21 @@ const Button = styled.div`
     }
 `
 
-const Select = styled.select`
-    background-color: #ffffff;
-    border-radius: 12px;
-    color: #757575;
-    border: 0;
-    box-sizing: border-box;
-    font-size: 18px;
-    height: 100%;
-    outline: 0;
-    padding: 4px 20px 0;
-    width: 100%;
-    &:focus{
-        border: 2px solid #27ae60;
-    }
-`
-
-const InputContainer = styled.div`
-    height: 70%;
-    width: 40%;
-    margin-top:1%;
-    margin-left:1%;
-    float:left;
-` 
-const Input = styled.input`
-    background-color: #ffffff;
-    border-radius: 12px;
-    border: 0;
-    box-sizing: border-box;
-    font-size: 18px;
-    height: 100%;
-    outline: 0;
-    padding: 4px 20px 0;
-    width: 100%;
-    &:focus{
-        border: 2px solid #27ae60;
-    }
-
-`
-
 const Img = styled.img`
     width: 80px;
     margin-left:4%;
+`
+
+const UserInfo = styled.div`
+    width: 30%;
+    background-color:red;
+    float:left;
+`
+
+const OffertInfo = styled.div`
+    width: 70%;
+    background-color:blue;
+    float:left;
 `
 
 const Good = (props) =>{
@@ -163,8 +129,12 @@ const Good = (props) =>{
     )
 }
 
-const CategoryOffert = () =>{
-    
+
+const MyAccount = () => {
+
+    // const auth = getAuth();
+    // const user = auth.currentUser;
+
     const { category } = useParams()
     const [goods, setGoods] = useState([]);
     const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
@@ -172,7 +142,8 @@ const CategoryOffert = () =>{
                 "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"];
     const [voivodeship, setVoivodeship] = useState('');
     const [search, setSearch] = useState('');
-    
+    const [user, setUser] = useState();
+
     const goodsList = goods.map( (good) => (  
         <Good 
             title = {good.title}
@@ -188,12 +159,18 @@ const CategoryOffert = () =>{
     
     };
 
+    onAuthStateChanged(auth, (currentUser) =>{
+        setUser(currentUser.uid) 
+    })
     
-    
-    useEffect(() => {
-        if(category == "All"){
+   
+
+    useEffect(() => {  
+        console.log(user)
+        if(user){
             const fetchGoods = async () =>{
-                const querySnapshot = await getDocs(query(collection(db, "goods")));
+                console.log("SSS" + auth.currentUser.uid)
+                const querySnapshot = await getDocs(query(collection(db, "goods"), where("uid", "==", user)));
                 querySnapshot.forEach((doc) => {
                     setGoods(goods => [...goods, doc.data()])
                 console.log(doc.id, " => ", doc.data());
@@ -201,18 +178,10 @@ const CategoryOffert = () =>{
             }
             fetchGoods()
         }else{
-           const fetchGoods = async () =>{
-                const querySnapshot = await getDocs(query(collection(db, "goods"), where("category", "==", category)));
-                querySnapshot.forEach((doc) => {
-                    setGoods(goods => [...goods, doc.data()])
-                console.log(doc.id, " => ", doc.data());
-                });
-            } 
-            fetchGoods()
+            console.log("Serror here")
         }
-      }, [])
-
-    
+      }, [user])
+      
     return (
         <Container>
             <LogoContainer>
@@ -225,35 +194,26 @@ const CategoryOffert = () =>{
                 <Link to="/addgoods" style={{ textDecoration: 'none' }}>
                     <Button > Add Goods </Button>
                 </Link>
+
+                <Link to="/myaccount" style={{ textDecoration: 'none' }}>
+                    <Button > My Account </Button>
+                </Link>
+
             </LogoContainer>
 
-            <SearchBar>
-                    <InputContainer>
-                    <Input placeholder="What are you looking for..." 
-                        onChange = {event => setSearch(event.target.value)}
-                    />
-                </InputContainer>
-
-                <InputContainer>
-                    <Select onChange = {event => setVoivodeship(event.target.value)}>
-                        {voivodeshipList.map((voivodeship) => (
-                        <option value={voivodeship}>{voivodeship}</option>
-                        ))}
-                    </Select>
-                </InputContainer>
-
-                <Button style={{ float: 'left', width: "17%", }}> Search </Button>
-            </SearchBar>
-
             <ContentContainer>
-                {goodsList}
+                <UserInfo>
+                    s
+                </UserInfo>
 
-                
+                <OffertInfo>
+                    {goodsList}
+
+                </OffertInfo>
             </ContentContainer>
 
         </Container>
-    );
-    
+    )
 }
 
-export default CategoryOffert
+export default MyAccount

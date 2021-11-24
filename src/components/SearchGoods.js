@@ -1,11 +1,15 @@
-import React, {Component, useState} from 'react'
+import React, {Component, useState, useEffect} from 'react'
 import { signOut } from '@firebase/auth';
 import './Login.css';
 import {auth, db} from "../firebase-config"
-import {collection, getDocs} from "firebase/firestore";
+import {collection, getDocs, where, query} from "firebase/firestore";
 import styled from "styled-components"
 import logo from '../logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
+
+
+
+
 
 const Container = styled.div`
     background-color: #DDDDDD;
@@ -41,25 +45,26 @@ const ContentContainer = styled.div`
 const Form = styled.div`
     margin-left: auto;
     margin-right: auto;
-    background-color: #123456;
+    background-color: #DDDDDD;
     border-radius: 20px;
     box-sizing: border-box;
     padding: 20px;
-    width: 600px;
-    min-height: 100px;
+    width: 80%;
+    min-height: 200px;
     overflow: hidden;
     margin-top: 20px
 `
 const Title = styled.div`
-    
-    color: black;
+    color: #444444;
+
     text-align:center;
     font-family: sans-serif;
     font-size: 36px;
     font-weight: 600;
 `
 const Subtitle = styled.div`
-    color: #eee;
+    color: #444444;
+
     font-family: sans-serif;
     font-size: 16px;
     font-weight: 600;
@@ -68,7 +73,7 @@ const Photo = styled.div`
     float: left;
     background-color: red;
     width: 35%;
-    min-height: 100px;
+    min-height: 200px;
     overflow: hidden;
 `
 const InfoContainer = styled.div`
@@ -136,110 +141,112 @@ const Input = styled.input`
     }
 
 `
-const CategoryContainer = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    width: 40%;
-    height:80%;
-`
-
-const ButtonCategory = styled.div`
-    margin-left:1%;
-    margin-right:1%;
-    cursor: pointer;
-    background-color: #27ae60;
-    margin-top:1%;
-    border-radius: 12px;
-    border: 0;
-    box-sizing: border-box;
-    color: #eee;
-    cursor: pointer;
-    font-size: 1.3vw;
-    text-align: center;
-    padding: 6.1% 0;
-    vertical-align: middle;
-    width: 31.3%;
-    height: 20%;
-    float:left;
-    &:focus, &:hover{
-        background-color: #1a8f4b;
-    }
-`
 
 const Img = styled.img`
     width: 80px;
     margin-left:4%;
 `
 
-const MainApp = () => {
+const Good = (props) =>{
+    return(
+        <Link to={"/offer" 
+        
+        } style={{ textDecoration: 'none' }}>
+            <Form>
+                <Photo>
+                    {props.photo}
+                </Photo>
+                <InfoContainer>
+                    <Title>{props.title}</Title>
+                    <Subtitle>{props.who}</Subtitle>
+                    <Subtitle>{props.where}</Subtitle>
+                </InfoContainer>
+            </Form>
+        </Link>
+    )
+}
 
-    const [voivodeship, setVoivodeship] = useState('Dolnośląskie');
-    const [search, setSearch] = useState();
+const SearchGoods = () =>{
+    
+    const { searchName, voivodeshipName } = useParams()
+    const [goods, setGoods] = useState([]);
     const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
-                    "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
-                    "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"]; 
-    const categoryList = ["Sport", "Electronics", "House", "Garden", "Automotive", "Kids", "Clothes", "Animals", "Music", "Education" , "All", "Other"];
- 
+                "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
+                "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"];
+    const [voivodeship, setVoivodeship] = useState(voivodeshipName);
+    const [search, setSearch] = useState(searchName);
+    
+    const goodsList = goods.map( (good) => (  
+        <Good 
+            title = {good.title}
+            who = {good.who}
+            description = {good.description}
+            where = {good.where}
+            photo = {good.photo}
+        />   
+    )) 
+    
     const logout = async () => {
         await signOut(auth)
-    
     };
-   
+    
+    useEffect(() => {
+    
+        const fetchGoods = async () =>{
+            const querySnapshot = await getDocs(query(collection(db, "goods"), where("voivodeship", "==", voivodeshipName)));
+            querySnapshot.forEach((doc) => {
+                if(doc.data().title.toUpperCase().includes(searchName.toUpperCase())){
+                    setGoods(goods => [...goods, doc.data()])
+                }
+            console.log(doc.id, " => ", doc.data().title);
+            });
+        } 
+        fetchGoods()
+    
+      }, [])
+
+    
     return (
         <Container>
             <LogoContainer>
-                <Link to="/" style={{ textDecoration: 'none' }}>
-                    <Img src={logo} alt="Logo" />
-                </Link>
+            <Link to="/" style={{ textDecoration: 'none' }}>
+                            <Img src={logo} alt="Logo" />
+                        </Link>
 
                 <Button onClick = {logout}> Sign Out </Button>
 
                 <Link to="/addgoods" style={{ textDecoration: 'none' }}>
                     <Button > Add Goods </Button>
                 </Link>
-
-                <Link to="/myaccount" style={{ textDecoration: 'none' }}>
-                    <Button > My Account </Button>
-                </Link>
-
             </LogoContainer>
 
             <SearchBar>
-                <InputContainer>
-                    <Input 
-                        placeholder="What are you looking for..." 
+                    <InputContainer>
+                    <Input placeholder="What are you looking for..." 
                         onChange = {event => setSearch(event.target.value)}
                     />
                 </InputContainer>
 
                 <InputContainer>
-                    <Select 
-                        onChange = {event => setVoivodeship(event.target.value)}>
+                    <Select onChange = {event => setVoivodeship(event.target.value)}>
                         {voivodeshipList.map((voivodeship) => (
                         <option value={voivodeship}>{voivodeship}</option>
                         ))}
                     </Select>
                 </InputContainer>
-                
-                <Link to={{pathname:'/searchgoods/' + search + '/' + voivodeship, style:{ textDecoration: 'none' }}}>
-                    <Button style={{ float: 'left', width: "17%", }}> Search </Button>
-                </Link>
+
+                <Button style={{ float: 'left', width: "17%", }}> Search </Button>
             </SearchBar>
 
             <ContentContainer>
-                <Title>Category</Title>
+                {goodsList}
 
-                <CategoryContainer>
-                    {categoryList.map((category) => (
-                        <Link to={{pathname:'/categoryoffert/' + category, style:{ textDecoration: 'none' }}}>
-                            <ButtonCategory > {category} </ButtonCategory>
-                        </Link>
-                    ))}
-                </CategoryContainer>
+                
             </ContentContainer>
 
         </Container>
-    )
+    );
+    
 }
 
-export default MainApp
+export default SearchGoods
