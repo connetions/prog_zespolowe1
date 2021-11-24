@@ -1,12 +1,13 @@
 import React, {Component, useState} from 'react'
 import { onAuthStateChanged, signOut } from '@firebase/auth';
 import './Login.css';
-import { auth, db } from "../firebase-config"
+import { auth, db, storage} from "../firebase-config"
 import { Navigate } from 'react-router-dom';
 import {collection,  addDoc, } from "@firebase/firestore";
 import styled from "styled-components"
 import { Link } from 'react-router-dom';
 import logo from '../logo.png';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
 const Container = styled.div`
@@ -146,9 +147,13 @@ class AfterAdd extends Component{
 
 const AddGoods = () =>{
 
+    let imgUrl = ""
+    // const [imgUrl, setImgUrl] = useState();
+    const [fileUrl, setFileUrl] = useState('');
     const [goodsName, setGoodsName] = useState();
     const [description, setDescription] = useState();
-    const [photo, setPhoto] = useState();
+    const [img, setImg] = useState(null);
+    const [progress, setProgress] = useState(0);
     const [where, setWhere] = useState();
     const [user, setUser] = useState({});
     const [flag, setFlag] = useState(false);
@@ -162,14 +167,62 @@ const AddGoods = () =>{
     onAuthStateChanged(auth, (currentUser) =>{
         setUser(currentUser) 
     })
-    
+
+    const formHandler = (e) => {
+        e.preventDefault();
+        const file = e.target.files[0];
+        // console.log(file.name)
+        setImg(file);
+    };
+
+
+    const uploadFiles = () => {
+        const storage = getStorage();
+        const storageRef = ref(storage, 'images/' +img.name );
+        const uploadTask = uploadBytesResumable(storageRef, img);
+
+        // Register three observers:
+        // 1. 'state_changed' observer, called any time the state changes
+        // 2. Error observer, called on failure
+        // 3. Completion observer, called on successful completion
+        uploadTask.on('state_changed', 
+        (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+            case 'paused':
+                console.log('Upload is paused');
+                break;
+            case 'running':
+                console.log('Upload is running');
+                break;
+            }
+        }, 
+        (error) => {
+            // Handle unsuccessful uploads
+        }, 
+        () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                console.log('File available at'+ downloadURL); 
+                imgUrl = downloadURL;
+                console.log('File ddd available at'+ imgUrl); 
+                addGoods();
+            });
+        }
+        );
+    }
+
     const addGoods = async () => {
         try{           
             setFlag(true);
-            console.log(user.uid);
+            // console.log(user.uid);
             try{
                 const docRef = await addDoc(collection(db, "goods"), {
-                        photo:photo,
+                        photo:imgUrl,
                         title:goodsName,
                         where: where,
                         description: description,
@@ -178,6 +231,7 @@ const AddGoods = () =>{
                         category: category,
                         uid:user.uid
                     });
+
                 console.log("Document written with ID: ", docRef.id);
             } catch (e) {
             console.error("Error adding document: ", e);
@@ -212,8 +266,9 @@ const AddGoods = () =>{
                         
                         <InputContainer>
                             <Input 
+                                type="file"
                                 placeholder="Photo" 
-                                onChange = {event => setPhoto(event.target.value)}
+                                onChange = {formHandler}
                             />
                         </InputContainer>
 
@@ -256,7 +311,7 @@ const AddGoods = () =>{
                             />
                         </InputContainer>
 
-                        <Button onClick = {addGoods}> Add goods</Button>
+                        <Button onClick = {uploadFiles}> Add goods</Button>
 
                         <Link to="/" style={{ textDecoration: 'none' }}>
                             <Button > Back to Main </Button>
