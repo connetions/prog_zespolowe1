@@ -197,6 +197,11 @@ const MainApp = () => {
                 <Link to="/addgoods" style={{ textDecoration: 'none' }}>
                     <Button > Add Goods </Button>
                 </Link>
+
+                <Link to="/myaccount" style={{ textDecoration: 'none' }}>
+                    <Button > My Account </Button>
+                </Link>
+
             </LogoContainer>
 
             <SearchBar>
