@@ -65,6 +65,8 @@ const Subtitle = styled.div`
     font-family: sans-serif;
     font-size: 16px;
     font-weight: 600;
+    padding-left: 40px;
+    padding-top: 20px;
 `
 const Photo = styled.div`
     float: left;
@@ -82,18 +84,14 @@ const Button = styled.div`
     margin-left:1%;
     cursor: pointer;
     background-color: #27ae60;
-    margin-top:1%;
+    margin-top:20px;
     border-radius: 12px;
     border: 0;
     box-sizing: border-box;
     color: #eee;
     cursor: pointer;
-    font-size: 1.3vw;
-    text-align: center;
-    padding: 1.1% 0;
-    vertical-align: middle;
-    width: 10%;
-    height: 70%;
+    font-size: 22px;
+    padding: 10px 20px;
     float:right;
     &:focus, &:hover{
         background-color: #1a8f4b;
@@ -225,10 +223,14 @@ const CategoryOffert = () =>{
                 <Link to="/addgoods" style={{ textDecoration: 'none' }}>
                     <Button > Add Goods </Button>
                 </Link>
+
+                <Link to="/myaccount" style={{ textDecoration: 'none' }}>
+                    <Button > My Account </Button>
+                </Link>
             </LogoContainer>
 
             <SearchBar>
-                    <InputContainer>
+                <InputContainer>
                     <Input placeholder="What are you looking for..." 
                         onChange = {event => setSearch(event.target.value)}
                     />

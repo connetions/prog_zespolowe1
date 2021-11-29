@@ -72,25 +72,21 @@ const ContentContainer = styled.div`
 `
 
 const Button = styled.div`
-    margin-left:1%;
-    cursor: pointer;
-    background-color: #27ae60;
-    margin-top:1%;
-    border-radius: 12px;
-    border: 0;
-    box-sizing: border-box;
-    color: #eee;
-    cursor: pointer;
-    font-size: 1.3vw;
-    text-align: center;
-    padding: 1.1% 0;
-    vertical-align: middle;
-    width: 10%;
-    height: 70%;
-    float:right;
-    &:focus, &:hover{
-        background-color: #1a8f4b;
-    }
+  margin-left:1%;
+  cursor: pointer;
+  background-color: #27ae60;
+  margin-top:20px;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 10px 20px;
+  float:right;
+  &:focus, &:hover{
+    background-color: #1a8f4b;
+  }
 `
 
 const Img = styled.img`

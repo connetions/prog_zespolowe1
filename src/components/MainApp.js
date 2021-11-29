@@ -77,25 +77,21 @@ const InfoContainer = styled.div`
   
 `
 const Button = styled.div`
-    margin-left:1%;
-    cursor: pointer;
-    background-color: #27ae60;
-    margin-top:1%;
-    border-radius: 12px;
-    border: 0;
-    box-sizing: border-box;
-    color: #eee;
-    cursor: pointer;
-    font-size: 1.3vw;
-    text-align: center;
-    padding: 1.1% 0;
-    vertical-align: middle;
-    width: 10%;
-    height: 70%;
-    float:right;
-    &:focus, &:hover{
-        background-color: #1a8f4b;
-    }
+  margin-left:1%;
+  cursor: pointer;
+  background-color: #27ae60;
+  margin-top:20px;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  color: #eee;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 10px 20px;
+  float:right;
+  &:focus, &:hover{
+    background-color: #1a8f4b;
+  }
 `
 
 const Select = styled.select`
@@ -146,21 +142,21 @@ const CategoryContainer = styled.div`
 const ButtonCategory = styled.div`
     margin-left:1%;
     margin-right:1%;
+    margin-top:1%;
     cursor: pointer;
     background-color: #27ae60;
-    margin-top:1%;
     border-radius: 12px;
     border: 0;
     box-sizing: border-box;
     color: #eee;
-    cursor: pointer;
-    font-size: 1.3vw;
-    text-align: center;
+    font-size: 22px;
     padding: 6.1% 0;
-    vertical-align: middle;
     width: 31.3%;
     height: 20%;
     float:left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &:focus, &:hover{
         background-color: #1a8f4b;
     }
