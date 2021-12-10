@@ -77,21 +77,17 @@ const InfoContainer = styled.div`
   
 `
 const Button = styled.div`
-    margin-left:1%;
+    margin-left:4px;
     cursor: pointer;
     background-color: #27ae60;
-    margin-top:1%;
+    margin-top:12px;
     border-radius: 12px;
     border: 0;
     box-sizing: border-box;
     color: #eee;
     cursor: pointer;
-    font-size: 1.3vw;
-    text-align: center;
-    padding: 1.1% 0;
-    vertical-align: middle;
-    width: 10%;
-    height: 70%;
+    font-size: 15px;
+    padding: 20px;
     float:right;
     &:focus, &:hover{
         background-color: #1a8f4b;
@@ -150,16 +146,13 @@ const ButtonCategory = styled.div`
     background-color: #27ae60;
     margin-top:1%;
     border-radius: 12px;
-    border: 0;
     box-sizing: border-box;
     color: #eee;
     cursor: pointer;
-    font-size: 1.3vw;
+    font-size: 18px;
     text-align: center;
-    padding: 6.1% 0;
+    padding: 30px 20px;
     vertical-align: middle;
-    width: 31.3%;
-    height: 20%;
     float:left;
     &:focus, &:hover{
         background-color: #1a8f4b;
