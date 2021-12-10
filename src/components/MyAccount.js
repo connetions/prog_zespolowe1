@@ -119,7 +119,7 @@ const Good = (props) =>{
     return(
         
             <Form>
-                <Link to={"/offer" 
+                <Link to={"/offer/" + props.gooduid
         
                 } style={{ textDecoration: 'none' }}>
                     <Photo>
@@ -131,6 +131,14 @@ const Good = (props) =>{
                     <Subtitle>{props.who}</Subtitle>
                     <Subtitle>{props.where}</Subtitle>
                     <Button onClick = {deleteGood}>Delete</Button>
+                    <br/>
+                    <Link to={"/offeredit/" + props.gooduid
+        
+                } style={{ textDecoration: 'none' }}>
+
+                    <Button>edit</Button>
+                </Link>
+                    
                 </InfoContainer>
             </Form>
         
@@ -174,7 +182,6 @@ const MyAccount = () => {
     })
     
     
-   
 
     useEffect(() => {  
         console.log(user)
