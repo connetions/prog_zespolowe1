@@ -3,9 +3,9 @@ import './Login.css';
 import styled from "styled-components"
 import { Link } from 'react-router-dom';
 import Header from "./Header"
+import {useMediaQuery} from './hooks';
 
 const Container = styled.div`
-    background-color: #DDDDDD;
     color: #444444;
     margin: auto;
     width: 100%;
@@ -14,8 +14,8 @@ const Container = styled.div`
 `
 
 const ContentContainer = styled.div`
+    max-width: 800px;
     background-color:white;
-    padding-top:5%;
     margin: auto;
     width: 100%;
     height: 80%;
@@ -32,9 +32,11 @@ const Title = styled.div`
 `
 
 const SearchBar = styled.div`
+    background-color: #DDDDDD;
     display: flex;
-    padding: 20px 0;
+    padding: 20px;
     justify-content: center;
+    margin-bottom: 50px;
 `
 
 const Button = styled(Link)`
@@ -113,8 +115,16 @@ const ButtonCategory = styled(Link)`
     }
 `
 
-const MainApp = () => {
+const styles = {
+    container: isRowBased => ({
+        display: 'flex',
+        flexDirection: isRowBased ? 'row' : 'column',
+        justifyContent: 'space-around'
+    })
+};
 
+const MainApp = () => {
+    const isRowBased = useMediaQuery('(min-width: 620px)')
     const [voivodeship, setVoivodeship] = useState('Dolnośląskie');
     const [search, setSearch] = useState();
     const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
@@ -150,7 +160,7 @@ const MainApp = () => {
             <ContentContainer>
                 <Title>Category</Title>
 
-                <CategoryContainer>
+                <CategoryContainer style={styles.container(isRowBased)}>
                     {categoryList.map((category) => (
                         <ButtonCategory to={{pathname:'/categoryoffert/' + category}}>
                              {category}

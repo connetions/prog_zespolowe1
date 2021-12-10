@@ -10,7 +10,7 @@ const LogoContainer = styled.div`
     width:100%;
     display:flex;
     justify-content: space-between;
-    padding: 5px 20px;
+    padding: 15px 50px;
     box-sizing: border-box;
 `
 
@@ -47,7 +47,7 @@ const Buttons = styled.div`
 `
 
 const Img = styled.img`
-    width: 80px;
+    width: 65px;
 `
 
 const Button = styled(Link)`
