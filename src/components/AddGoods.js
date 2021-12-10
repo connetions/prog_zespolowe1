@@ -3,7 +3,7 @@ import { onAuthStateChanged, signOut } from '@firebase/auth';
 import './Login.css';
 import { auth, db, storage} from "../firebase-config"
 import { Navigate } from 'react-router-dom';
-import {doc,collection,  addDoc, updateDoc, arrayUnion, getDoc } from "@firebase/firestore";
+import {doc,collection,  addDoc, updateDoc, arrayUnion, getDoc,  } from "@firebase/firestore";
 import styled from "styled-components"
 import { Link } from 'react-router-dom';
 import logo from '../logo.png';

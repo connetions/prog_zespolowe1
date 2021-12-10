@@ -234,6 +234,9 @@ const MyAccount = () => {
                 {userInfo.email}
                 
                 {userInfo.phone}
+                <Link to="/edituser" style={{ textDecoration: 'none' }}>
+                    <Button > Edit USer </Button>
+                </Link>
                 </UserInfo>
 
                 <OffertInfo>
