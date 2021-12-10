@@ -22,12 +22,7 @@ const LogoContainer = styled.div`
     clear:both;
 `
 const SearchBar = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    width:70%;
-    height:10%;
-    text-align: center;
-    clear:both;
+    
 `
 const ContentContainer = styled.div`
     background-color:white;
@@ -51,6 +46,7 @@ const Form = styled.div`
     margin-top: 20px
 `
 const Title = styled.div`
+    margin-bottom: 20px;
     
     color: black;
     text-align:center;
@@ -76,19 +72,15 @@ const InfoContainer = styled.div`
     float:left;
   
 `
-const Button = styled.div`
-    margin-left:4px;
+const Button = styled(Link)`
     cursor: pointer;
     background-color: #27ae60;
-    margin-top:12px;
     border-radius: 12px;
-    border: 0;
     box-sizing: border-box;
     color: #eee;
     cursor: pointer;
     font-size: 15px;
     padding: 20px;
-    float:right;
     &:focus, &:hover{
         background-color: #1a8f4b;
     }
@@ -111,11 +103,7 @@ const Select = styled.select`
 `
 
 const InputContainer = styled.div`
-    height: 70%;
-    width: 40%;
-    margin-top:1%;
-    margin-left:1%;
-    float:left;
+    
 ` 
 const Input = styled.input`
     background-color: #ffffff;
@@ -133,12 +121,13 @@ const Input = styled.input`
 
 `
 const CategoryContainer = styled.div`
-    margin-left: 50px;
-    margin-right: 50px;  
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
+    padding: 0 50px ;
+    box-sizing: border-box;
+  
 `
 
 const ButtonCategory = styled(Link)`
@@ -148,11 +137,12 @@ const ButtonCategory = styled(Link)`
     box-sizing: border-box;
     color: #eee;
     cursor: pointer;
-    font-size: 18px;
-    padding: 30px 20px;
+    font-size: 25px;
+    padding: 75px 20px;
     flex: 0 0 30%;
     margin-bottom: 20px;
     text-align: center;
+    text-decoration: none;
     &:focus, &:hover{
         background-color: #1a8f4b;
     }
