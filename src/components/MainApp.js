@@ -18,11 +18,15 @@ const Container = styled.div`
 const LogoContainer = styled.div`
     background-color: #444444;
     width:100%;
-    height:10%;
-    clear:both;
+    display:flex;
+    justify-content: space-between;
+    padding: 5px 20px;
+    box-sizing: border-box;
 `
 const SearchBar = styled.div`
-    
+    display: flex;
+    padding: 20px 0;
+    justify-content: center;
 `
 const ContentContainer = styled.div`
     background-color:white;
@@ -47,7 +51,6 @@ const Form = styled.div`
 `
 const Title = styled.div`
     margin-bottom: 20px;
-    
     color: black;
     text-align:center;
     font-family: sans-serif;
@@ -78,13 +81,42 @@ const Button = styled(Link)`
     border-radius: 12px;
     box-sizing: border-box;
     color: #eee;
+    font-size: 15px;
+    padding: 20px;
+    text-decoration: none;
+    &:focus, &:hover{
+        background-color: #1a8f4b;
+    }
+`
+const ButtonLogo = styled(Link)`
     cursor: pointer;
+    color: #eee;
+    border-radius: 12px;
+    border: solid 2px #27ae60;
+    &:focus, &:hover{
+    transform: scale(1.1)}
+`
+const Buttonlogout = styled.a`
+    cursor: pointer;
+    background-color: #27ae60;
+    border-radius: 12px;
+    box-sizing: border-box;
+    color: #eee;
     font-size: 15px;
     padding: 20px;
     &:focus, &:hover{
         background-color: #1a8f4b;
     }
 `
+
+const Buttons = styled.div`
+    align-self: center; 
+    flex: 0 0 30%;
+    justify-content: space-between;
+    display: flex;
+
+`
+
 
 const Select = styled.select`
     background-color: #ffffff;
@@ -103,7 +135,8 @@ const Select = styled.select`
 `
 
 const InputContainer = styled.div`
-    
+    margin-right: 20px;
+    &:last-child{margin-right: 0}
 ` 
 const Input = styled.input`
     background-color: #ffffff;
@@ -136,7 +169,6 @@ const ButtonCategory = styled(Link)`
     border-radius: 12px;
     box-sizing: border-box;
     color: #eee;
-    cursor: pointer;
     font-size: 25px;
     padding: 75px 20px;
     flex: 0 0 30%;
@@ -150,7 +182,6 @@ const ButtonCategory = styled(Link)`
 
 const Img = styled.img`
     width: 80px;
-    margin-left:4%;
 `
 
 const MainApp = () => {
@@ -170,19 +201,21 @@ const MainApp = () => {
     return (
         <Container>
             <LogoContainer>
-                <Link to="/" style={{ textDecoration: 'none' }}>
+                <ButtonLogo to="/" >
                     <Img src={logo} alt="Logo" />
-                </Link>
+                </ButtonLogo>
+                <Buttons>
 
-                <Button onClick = {logout}> Sign Out </Button>
+                    <Buttonlogout onClick = {logout}> Sign Out </Buttonlogout>
 
-                <Link to="/addgoods" style={{ textDecoration: 'none' }}>
-                    <Button > Add Goods </Button>
-                </Link>
+                    <Button to="/addgoods" >
+                        Add Goods
+                    </Button>
 
-                <Link to="/myaccount" style={{ textDecoration: 'none' }}>
-                    <Button > My Account </Button>
-                </Link>
+                    <Button to="/myaccount" >
+                         My Account
+                    </Button>
+                </Buttons>
 
             </LogoContainer>
 
@@ -203,9 +236,9 @@ const MainApp = () => {
                     </Select>
                 </InputContainer>
                 
-                <Link to={{pathname:'/searchgoods/' + search + '/' + voivodeship, style:{ textDecoration: 'none' }}}>
-                    <Button style={{}}> Search </Button>
-                </Link>
+                <Button to={{pathname:'/searchgoods/' + search + '/' + voivodeship}}>
+                      Search
+                </Button>
             </SearchBar>
 
             <ContentContainer>
