@@ -133,27 +133,26 @@ const Input = styled.input`
 
 `
 const CategoryContainer = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    width: 40%;
-    height:80%;
+    margin-left: 50px;
+    margin-right: 50px;  
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
 `
 
-const ButtonCategory = styled.div`
-    margin-left:1%;
-    margin-right:1%;
+const ButtonCategory = styled(Link)`
     cursor: pointer;
     background-color: #27ae60;
-    margin-top:1%;
     border-radius: 12px;
     box-sizing: border-box;
     color: #eee;
     cursor: pointer;
     font-size: 18px;
-    text-align: center;
     padding: 30px 20px;
-    vertical-align: middle;
-    float:left;
+    flex: 0 0 30%;
+    margin-bottom: 20px;
+    text-align: center;
     &:focus, &:hover{
         background-color: #1a8f4b;
     }
@@ -215,7 +214,7 @@ const MainApp = () => {
                 </InputContainer>
                 
                 <Link to={{pathname:'/searchgoods/' + search + '/' + voivodeship, style:{ textDecoration: 'none' }}}>
-                    <Button style={{ float: 'left', width: "17%", }}> Search </Button>
+                    <Button style={{}}> Search </Button>
                 </Link>
             </SearchBar>
 
@@ -224,9 +223,9 @@ const MainApp = () => {
 
                 <CategoryContainer>
                     {categoryList.map((category) => (
-                        <Link to={{pathname:'/categoryoffert/' + category, style:{ textDecoration: 'none' }}}>
-                            <ButtonCategory > {category} </ButtonCategory>
-                        </Link>
+                        <ButtonCategory to={{pathname:'/categoryoffert/' + category}}>
+                             {category}
+                        </ButtonCategory>
                     ))}
                 </CategoryContainer>
             </ContentContainer>
