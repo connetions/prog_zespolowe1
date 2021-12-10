@@ -11,6 +11,7 @@ import CategoryOffert from './components/CategoryOffert';
 import SearchGoods from './components/SearchGoods';
 import MyAccount from './components/MyAccount';
 import EditUser from './components/EditUser';
+import OfferEdit from './components/OfferEdit';
 
 class App extends Component {
   render(){
@@ -22,6 +23,7 @@ class App extends Component {
           <Route path='/register' element =  { <Register/> } />
           <Route path='/mainapp' element = { <MainApp/> } />
           <Route path='/offer/:IDoffert' element = { <Offer/>} />
+          <Route path='/offeredit/:IDoffert' element = { <OfferEdit/>} />
           <Route path='/addgoods' element = { <AddGoods/>} />
           <Route path='/myaccount' element = { <MyAccount/>} />
           <Route path='/edituser' element = { <EditUser/>} />
