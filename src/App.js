@@ -10,6 +10,7 @@ import AddGoods from './components/AddGoods';
 import CategoryOffert from './components/CategoryOffert';
 import SearchGoods from './components/SearchGoods';
 import MyAccount from './components/MyAccount';
+import EditUser from './components/EditUser';
 
 class App extends Component {
   render(){
@@ -20,9 +21,10 @@ class App extends Component {
           <Route path='/' element = { <Login /> } />
           <Route path='/register' element =  { <Register/> } />
           <Route path='/mainapp' element = { <MainApp/> } />
-          <Route path='/offer' element = { <Offer/>} />
+          <Route path='/offer/:IDoffert' element = { <Offer/>} />
           <Route path='/addgoods' element = { <AddGoods/>} />
           <Route path='/myaccount' element = { <MyAccount/>} />
+          <Route path='/edituser' element = { <EditUser/>} />
           <Route path='/categoryoffert/:category' element = { <CategoryOffert/>} />
           <Route path='/searchgoods/:searchName/:voivodeshipName' element = { <SearchGoods/>} />
         </Routes>

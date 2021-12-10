@@ -1,9 +1,9 @@
-import React, {Component, useState} from 'react'
+import React, {Component, useState, useEffect} from 'react'
 import { onAuthStateChanged, signOut } from '@firebase/auth';
 import './Login.css';
 import { auth, db, storage} from "../firebase-config"
 import { Navigate } from 'react-router-dom';
-import {collection,  addDoc, } from "@firebase/firestore";
+import {doc,collection,  addDoc, updateDoc, arrayUnion, getDoc,  } from "@firebase/firestore";
 import styled from "styled-components"
 import { Link } from 'react-router-dom';
 import logo from '../logo.png';
@@ -157,6 +157,7 @@ const AddGoods = () =>{
     const [where, setWhere] = useState();
     const [user, setUser] = useState({});
     const [flag, setFlag] = useState(false);
+    const [userInfo, setUserInfo] = useState({});
     const [category, setCategory] = useState('Sport');
     const [voivodeship, setVoivodeship] = useState('Dolnośląskie');
     const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
@@ -175,6 +176,26 @@ const AddGoods = () =>{
         setImg(file);
     };
 
+
+    useEffect(() => {
+        const fetchUser = async () =>{
+            
+            if (typeof user.uid !== "undefined"){
+               const docRef = doc(db, "users", user.uid);
+               const docSnap = await getDoc(docRef); 
+               if (docSnap.exists() && typeof user.uid !== "undefined") {
+                
+                const userData = docSnap.data();
+                setUserInfo(userData)
+                console.log("Document data:", userData); 
+                } else {
+                    console.log("No such docsument!");
+                }
+            }
+            
+        }
+        fetchUser();
+      }, [user])
 
     const uploadFiles = () => {
         const storage = getStorage();
@@ -217,6 +238,10 @@ const AddGoods = () =>{
     }
 
     const addGoods = async () => {
+        let today = new Date();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        let dateTime = date+' '+time;
         try{           
             setFlag(true);
             // console.log(user.uid);
@@ -229,10 +254,21 @@ const AddGoods = () =>{
                         voivodeship: voivodeship,
                         who: user.email,
                         category: category,
-                        uid:user.uid
+                        uid:user.uid,
+                        date: dateTime,
+                        name: userInfo.name,
+                        surname: userInfo.surname,
+                        phone: userInfo.phone,
+                        email: userInfo.email
+                        
                     });
 
                 console.log("Document written with ID: ", docRef.id);
+
+                const goodRef = doc(db, "goods", docRef.id);
+                await updateDoc(goodRef, {
+                    goodid: docRef.id
+                });
             } catch (e) {
             console.error("Error adding document: ", e);
             }
