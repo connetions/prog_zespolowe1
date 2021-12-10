@@ -2,7 +2,7 @@ import React, {Component, useState, useEffect} from 'react'
 import { signOut ,onAuthStateChanged, getAuth} from '@firebase/auth';
 import './Login.css';
 import {auth, db} from "../firebase-config"
-import {collection, getDocs, where, query} from "firebase/firestore";
+import {collection, getDocs, where, query, getDoc, doc, deleteDoc} from "firebase/firestore";
 import styled from "styled-components"
 import logo from '../logo.png';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -47,7 +47,6 @@ const InfoContainer = styled.div`
     float:left;
   
 `
-
 const Container = styled.div`
     background-color: #DDDDDD;
     color: #444444;
@@ -111,21 +110,30 @@ const OffertInfo = styled.div`
 `
 
 const Good = (props) =>{
+    const deleteGood = async () => {
+        console.log(props.gooduid)
+        await deleteDoc(doc(db, "goods", props.gooduid));
+        window.location.reload(false);
+    }
+
     return(
-        <Link to={"/offer" 
         
-        } style={{ textDecoration: 'none' }}>
             <Form>
-                <Photo>
-                    <img width="100%" max-height = "200px"  src={props.photo} />
-                </Photo>
+                <Link to={"/offer" 
+        
+                } style={{ textDecoration: 'none' }}>
+                    <Photo>
+                        <img width="100%" max-height = "200px"  src={props.photo} />
+                    </Photo>
+                </Link>
                 <InfoContainer>
                     <Title>{props.title}</Title>
                     <Subtitle>{props.who}</Subtitle>
                     <Subtitle>{props.where}</Subtitle>
+                    <Button onClick = {deleteGood}>Delete</Button>
                 </InfoContainer>
             </Form>
-        </Link>
+        
     )
 }
 
@@ -137,6 +145,7 @@ const MyAccount = () => {
 
     const { category } = useParams()
     const [goods, setGoods] = useState([]);
+    const [userInfo, setUserInfo] = useState({});
     const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
                 "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
                 "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"];
@@ -151,6 +160,7 @@ const MyAccount = () => {
             description = {good.description}
             where = {good.where}
             photo = {good.photo}
+            gooduid = {good.goodid}
         />   
     )) 
     
@@ -162,6 +172,7 @@ const MyAccount = () => {
     onAuthStateChanged(auth, (currentUser) =>{
         setUser(currentUser.uid) 
     })
+    
     
    
 
@@ -175,8 +186,23 @@ const MyAccount = () => {
                     setGoods(goods => [...goods, doc.data()])
                 console.log(doc.id, " => ", doc.data());
                 });
+
+                if (typeof auth.currentUser.uid !== "undefined"){
+                    const docRef = doc(db, "users", auth.currentUser.uid);
+                    const docSnap = await getDoc(docRef); 
+                    if (docSnap.exists() && typeof auth.currentUser.uid !== "undefined") {
+                     
+                     const userData = docSnap.data();
+                     setUserInfo(userData)
+                     console.log("Document data:", userData); 
+                     } else {
+                         console.log("No such docsument!");
+                     }
+                 }
             }
-            fetchGoods()
+
+            
+            fetchGoods();
         }else{
             console.log("Serror here")
         }
@@ -203,7 +229,11 @@ const MyAccount = () => {
 
             <ContentContainer>
                 <UserInfo>
-                    s
+                {userInfo.name + '' + userInfo.surname}
+                <br/>
+                {userInfo.email}
+                
+                {userInfo.phone}
                 </UserInfo>
 
                 <OffertInfo>

@@ -146,7 +146,7 @@ const Img = styled.img`
 
 const Good = (props) =>{
     return(
-        <Link to={"/offer" 
+        <Link to={"/offer/" + props.IDgoods
         
         } style={{ textDecoration: 'none' }}>
             <Form>
@@ -164,7 +164,6 @@ const Good = (props) =>{
 }
 
 const CategoryOffert = () =>{
-    
     const { category } = useParams()
     const [goods, setGoods] = useState([]);
     const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
@@ -180,6 +179,7 @@ const CategoryOffert = () =>{
             description = {good.description}
             where = {good.where}
             photo = {good.photo}
+            IDgoods = {good.goodid}
         />   
     )) 
     

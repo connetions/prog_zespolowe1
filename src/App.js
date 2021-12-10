@@ -20,7 +20,7 @@ class App extends Component {
           <Route path='/' element = { <Login /> } />
           <Route path='/register' element =  { <Register/> } />
           <Route path='/mainapp' element = { <MainApp/> } />
-          <Route path='/offer' element = { <Offer/>} />
+          <Route path='/offer/:IDoffert' element = { <Offer/>} />
           <Route path='/addgoods' element = { <AddGoods/>} />
           <Route path='/myaccount' element = { <MyAccount/>} />
           <Route path='/categoryoffert/:category' element = { <CategoryOffert/>} />

@@ -1,12 +1,13 @@
-import React, {Component} from 'react'
-import { signOut } from '@firebase/auth';
+import React, {Component, useState, useEffect} from 'react'
+import { onAuthStateChanged,signOut } from '@firebase/auth';
 import './Login.css';
 import {auth, db} from "../firebase-config"
 // import {collection, getDocs, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
 import styled from "styled-components"
 import photo from '../staticresources/assets/rower.jpg';
 import logo from '../logo.png';
-import { useLocation } from 'react-router-dom';
+import { useLocation , useParams, Link} from 'react-router-dom';
+import {collection, getDocs, where, query,getDoc, doc} from "firebase/firestore";
 
 
 const Container = styled.div`
@@ -169,83 +170,154 @@ const Img = styled.img`
     margin-left:4%;
 `
 
-class Offer extends Component {
+const Button = styled.div`
+    margin-left:1%;
+    cursor: pointer;
+    background-color: #27ae60;
+    margin-top:1%;
+    border-radius: 12px;
+    border: 0;
+    box-sizing: border-box;
+    color: #eee;
+    cursor: pointer;
+    font-size: 1.3vw;
+    text-align: center;
+    padding: 1.1% 0;
+    vertical-align: middle;
+    width: 10%;
+    height: 70%;
+    float:right;
+    &:focus, &:hover{
+        background-color: #1a8f4b;
+    }
+`
+const Offer = () => {
 
-    logout = async () => {
+    const { IDoffert } = useParams()
+    const [good, setGood] = useState({});
+    const [user, setUser] = useState({});
+    const [userData, setUserData] = useState({});
+    
+    const logout = async () => {
         await signOut(auth)
 
     };
+    onAuthStateChanged(auth, (currentUser) =>{
+        setUser(currentUser) 
+    })
 
-    render(){
-        return (
-            <Container>
-                <LogoContainer>
-                    
-                    <span>Logo</span>
-                    <a onClick = {this.logout}> Sign Out </a>
-                </LogoContainer>
+    useEffect(() => {
+        console.log(IDoffert);
+        const fetchGood = async () =>{
+            const docRef = doc(db, "goods", IDoffert);
+            const docSnap = await getDoc(docRef);
 
-                <ContentContainer>
-                    <Photo>
-                        <img src={photo}/>
-                    </Photo>
+            if (docSnap.exists()) {
+                const goodData = docSnap.data();
+                setGood(goodData)
+                console.log("Document data:", good);
+                console.log("SSS" + user.uid)
+                
 
-                    <Announcement>
-                        <Col1>
-                            <InfoContainer>
-                                <Title>
-                                    Rower górski
-                                </Title>
-                                <Header>
-                                    Opis:
-                                </Header>
-                                <Subtitle>
-                                    Krótki opis rzeczy która jest do oddania.
-                                    Krótki opis rzeczy która jest do oddania.
-                                    Krótki opis rzeczy która jest do oddania.
-                                    Krótki opis rzeczy która jest do oddania.
+                if (typeof user.uid !== "undefined") {  // pof f5 sie robi podwojnie 
+                    const docRef2 = doc(db, "users", user.uid);
+                    const docSnap2 = await getDoc(docRef2);
+        
+                    if (docSnap2.exists()) {
+                        const usrData = docSnap2.data();
+                        setUserData(usrData)
+                        console.log("Document data2:", usrData);
+                    } else {
+                    // doc.data() will be undefined in this case
+                        console.log("No such docment!");
+                    }
+                }
+                
 
-                                </Subtitle>
-                                <Header>
-                                    Parametry:
-                                </Header>
-                                <Subtitle>
-                                    Wielkość kół: 26"
-                                </Subtitle>
+            } else {
+            // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+          
 
-                            </InfoContainer>
-                        </Col1>
+        }
 
-                        <Col2>
-                            <UserInfo>
-                                <Title>
-                                    Jan Kowalski
-                                </Title>
-                                <SubtitleSeller>
-                                    20.10.2021
-                                </SubtitleSeller>
-                                <SubtitleSeller>
-                                    Katowice, Polska
-                                </SubtitleSeller>
-                            </UserInfo>
+        fetchGood();
+      }, [user])
 
-                            <Buttons>
-                                <Send>
-                                    <a>Zadzwoń</a>
-                                </Send>
-                                <Send>
-                                    <a>Napisz</a>
-                                </Send>
-                            </Buttons>
-                        </Col2>
+    
+    return (
+        <Container>
+            <LogoContainer>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Img src={logo} alt="Logo" />
+                </Link>
 
-                    </Announcement>
+                <Button onClick = {logout}> Sign Out </Button>
 
-                </ContentContainer>
+                <Link to="/addgoods" style={{ textDecoration: 'none' }}>
+                    <Button > Add Goods </Button>
+                </Link>
 
-            </Container>
-        )
-    }
+                <Link to="/myaccount" style={{ textDecoration: 'none' }}>
+                    <Button > My Account </Button>
+                </Link>
+            </LogoContainer>
+
+            <ContentContainer>
+                <Photo>
+                    <img src={good.photo}/>
+                </Photo>
+
+                <Announcement>
+                    <Col1>
+                        <InfoContainer>
+                            <Title>
+                                {good.title}
+                            </Title>
+                            <Header>
+                                Opis:
+                            </Header>
+                            <Subtitle>
+                                {good.description}
+
+                            </Subtitle>
+
+                        </InfoContainer>
+                    </Col1>
+
+                    <Col2>
+                        <UserInfo>
+                            <Title>
+                                {userData.name + ' ' + userData.surname}
+                            </Title>
+                            <SubtitleSeller>
+                                {good.date}
+                            </SubtitleSeller>
+                            <SubtitleSeller>
+                                {good.voivodeship}, Polska
+                                <bt/>
+                                {good.where}
+                            </SubtitleSeller>
+                        </UserInfo>
+
+                        <Buttons>
+                            <Send>
+                                {userData.phone}
+                            </Send>
+                            <Send>
+                                {userData.email}
+                            </Send>
+                        </Buttons>
+                    </Col2>
+
+                </Announcement>
+
+            </ContentContainer>
+
+        </Container>
+    )
+    
 }
 
 export default Offer
