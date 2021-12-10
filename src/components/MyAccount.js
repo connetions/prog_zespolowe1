@@ -4,8 +4,8 @@ import './Login.css';
 import {auth, db} from "../firebase-config"
 import {collection, getDocs, where, query, getDoc, doc, deleteDoc} from "firebase/firestore";
 import styled from "styled-components"
-import logo from '../logo.png';
 import { Link, useLocation, useParams } from 'react-router-dom';
+import Header from "./Header";
 
 
 const Form = styled.div`
@@ -55,12 +55,7 @@ const Container = styled.div`
     height: 100%;
     box-sizing: border-box;
 `
-const LogoContainer = styled.div`
-    background-color: #444444;
-    width:100%;
-    height:10%;
-    clear:both;
-`
+
 const ContentContainer = styled.div`
     padding-top:5%;
     background-color:white;
@@ -90,11 +85,6 @@ const Button = styled.div`
     &:focus, &:hover{
         background-color: #1a8f4b;
     }
-`
-
-const Img = styled.img`
-    width: 80px;
-    margin-left:4%;
 `
 
 const UserInfo = styled.div`
@@ -217,23 +207,7 @@ const MyAccount = () => {
       
     return (
         <Container>
-            <LogoContainer>
-                <Link to="/" style={{ textDecoration: 'none' }}>
-                    <Img src={logo} alt="Logo" />
-                </Link>
-
-                <Button onClick = {logout}> Sign Out </Button>
-
-                <Link to="/addgoods" style={{ textDecoration: 'none' }}>
-                    <Button > Add Goods </Button>
-                </Link>
-
-                <Link to="/myaccount" style={{ textDecoration: 'none' }}>
-                    <Button > My Account </Button>
-                </Link>
-
-            </LogoContainer>
-
+            <Header/>
             <ContentContainer>
                 <UserInfo>
                 {userInfo.name + '' + userInfo.surname}

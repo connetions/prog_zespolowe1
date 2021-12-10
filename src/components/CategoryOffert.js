@@ -4,8 +4,8 @@ import './Login.css';
 import {auth, db, app} from "../firebase-config"
 import {collection, getDocs, where, query} from "firebase/firestore";
 import styled from "styled-components"
-import logo from '../logo.png';
 import { Link, useLocation, useParams } from 'react-router-dom';
+import Header from "./Header";
 
 
 const Container = styled.div`
@@ -16,20 +16,7 @@ const Container = styled.div`
     height: 100%;
     box-sizing: border-box;
 `
-const LogoContainer = styled.div`
-    background-color: #444444;
-    width:100%;
-    height:10%;
-    clear:both;
-`
-const SearchBar = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    width:70%;
-    height:10%;
-    text-align: center;
-    clear:both;
-`
+
 const ContentContainer = styled.div`
     background-color:white;
     padding-top:5%;
@@ -78,70 +65,60 @@ const InfoContainer = styled.div`
     float:left;
   
 `
-const Button = styled.div`
-    margin-left:1%;
-    cursor: pointer;
-    background-color: #27ae60;
-    margin-top:1%;
-    border-radius: 12px;
-    border: 0;
-    box-sizing: border-box;
-    color: #eee;
-    cursor: pointer;
-    font-size: 1.3vw;
-    text-align: center;
-    padding: 1.1% 0;
-    vertical-align: middle;
-    width: 10%;
-    height: 70%;
-    float:right;
-    &:focus, &:hover{
-        background-color: #1a8f4b;
-    }
+const SearchBar = styled.div`
+  display: flex;
+  padding: 20px 0;
+  justify-content: center;
+`
+
+const Button = styled(Link)`
+  cursor: pointer;
+  background-color: #27ae60;
+  border-radius: 12px;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 15px;
+  padding: 20px;
+  text-decoration: none;
+  &:focus, &:hover{
+    background-color: #1a8f4b;
+  }
 `
 
 const Select = styled.select`
-    background-color: #ffffff;
-    border-radius: 12px;
-    color: #757575;
-    border: 0;
-    box-sizing: border-box;
-    font-size: 18px;
-    height: 100%;
-    outline: 0;
-    padding: 4px 20px 0;
-    width: 100%;
-    &:focus{
-        border: 2px solid #27ae60;
-    }
+  background-color: #ffffff;
+  border-radius: 12px;
+  color: #757575;
+  border: 0;
+  box-sizing: border-box;
+  font-size: 18px;
+  height: 100%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 100%;
+  &:focus{
+    border: 2px solid #27ae60;
+  }
 `
 
 const InputContainer = styled.div`
-    height: 70%;
-    width: 40%;
-    margin-top:1%;
-    margin-left:1%;
-    float:left;
-` 
-const Input = styled.input`
-    background-color: #ffffff;
-    border-radius: 12px;
-    border: 0;
-    box-sizing: border-box;
-    font-size: 18px;
-    height: 100%;
-    outline: 0;
-    padding: 4px 20px 0;
-    width: 100%;
-    &:focus{
-        border: 2px solid #27ae60;
-    }
-
+    margin-right: 20px;
+    &:last-child{margin-right: 0}
 `
+const Input = styled.input`
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 0;
+  box-sizing: border-box;
+  font-size: 18px;
+  height: 100%;
+  outline: 0;
+  padding: 4px 20px 0;
+  width: 100%;
+  &:focus{
+    border: 2px solid #27ae60;
+  }
 
-const Img = styled.img`
-    width: 80px;
-    margin-left:4%;
 `
 
 const Good = (props) =>{
@@ -182,14 +159,7 @@ const CategoryOffert = () =>{
             IDgoods = {good.goodid}
         />   
     )) 
-    
-    const logout = async () => {
-        await signOut(auth)
-    
-    };
 
-    
-    
     useEffect(() => {
         if(category == "All"){
             const fetchGoods = async () =>{
@@ -215,34 +185,27 @@ const CategoryOffert = () =>{
     
     return (
         <Container>
-            <LogoContainer>
-                <Link to="/" style={{ textDecoration: 'none' }}>
-                    <Img src={logo} alt="Logo" />
-                </Link>
-
-                <Button onClick = {logout}> Sign Out </Button>
-
-                <Link to="/addgoods" style={{ textDecoration: 'none' }}>
-                    <Button > Add Goods </Button>
-                </Link>
-            </LogoContainer>
-
+            <Header/>
             <SearchBar>
-                    <InputContainer>
-                    <Input placeholder="What are you looking for..." 
+                <InputContainer>
+                    <Input
+                        placeholder="What are you looking for..."
                         onChange = {event => setSearch(event.target.value)}
                     />
                 </InputContainer>
 
                 <InputContainer>
-                    <Select onChange = {event => setVoivodeship(event.target.value)}>
+                    <Select
+                        onChange = {event => setVoivodeship(event.target.value)}>
                         {voivodeshipList.map((voivodeship) => (
-                        <option value={voivodeship}>{voivodeship}</option>
+                            <option value={voivodeship}>{voivodeship}</option>
                         ))}
                     </Select>
                 </InputContainer>
 
-                <Button style={{ float: 'left', width: "17%", }}> Search </Button>
+                <Button to={{pathname:'/searchgoods/' + search + '/' + voivodeship}}>
+                    Search
+                </Button>
             </SearchBar>
 
             <ContentContainer>
