@@ -1,141 +1,25 @@
 import React, {Component, useState, useEffect} from 'react'
-import { signOut } from '@firebase/auth';
 import './Login.css';
 import {auth, db, app} from "../firebase-config"
 import {collection, getDocs, where, query} from "firebase/firestore";
-import styled from "styled-components"
 import { Link, useLocation, useParams } from 'react-router-dom';
 import Header from "./Header";
-
-
-const Container = styled.div`
-    background-color: #DDDDDD;
-    color: #444444;
-    margin: auto;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-`
-
-const ContentContainer = styled.div`
-    background-color:white;
-    padding-top:5%;
-    margin: auto;
-    width: 100%;
-    height: 80%;
-    clear:both;
-`
-
-const Form = styled.div`
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #DDDDDD;
-    border-radius: 20px;
-    box-sizing: border-box;
-    padding: 20px;
-    width: 80%;
-    min-height: 200px;
-    overflow: hidden;
-    margin-top: 20px
-`
-const Title = styled.div`
-    color: #444444;
-
-    text-align:center;
-    font-family: sans-serif;
-    font-size: 36px;
-    font-weight: 600;
-`
-const Subtitle = styled.div`
-    color: #444444;
-
-    font-family: sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-`
-const Photo = styled.div`
-    float: left;
-    background-color: red;
-    width: 35%;
-    max-height: 200px;
-    overflow: hidden;
-`
-const InfoContainer = styled.div`
-    width: 35%;
-    float:left;
-  
-`
-const SearchBar = styled.div`
-  display: flex;
-  padding: 20px 0;
-  justify-content: center;
-`
-
-const Button = styled(Link)`
-  cursor: pointer;
-  background-color: #27ae60;
-  border-radius: 12px;
-  box-sizing: border-box;
-  color: #eee;
-  font-size: 15px;
-  padding: 20px;
-  text-decoration: none;
-  &:focus, &:hover{
-    background-color: #1a8f4b;
-  }
-`
-
-const Select = styled.select`
-  background-color: #ffffff;
-  border-radius: 12px;
-  color: #757575;
-  border: 0;
-  box-sizing: border-box;
-  font-size: 18px;
-  height: 100%;
-  outline: 0;
-  padding: 4px 20px 0;
-  width: 100%;
-  &:focus{
-    border: 2px solid #27ae60;
-  }
-`
-
-const InputContainer = styled.div`
-    margin-right: 20px;
-    &:last-child{margin-right: 0}
-`
-const Input = styled.input`
-  background-color: #ffffff;
-  border-radius: 12px;
-  border: 0;
-  box-sizing: border-box;
-  font-size: 18px;
-  height: 100%;
-  outline: 0;
-  padding: 4px 20px 0;
-  width: 100%;
-  &:focus{
-    border: 2px solid #27ae60;
-  }
-
-`
+import '../index.css'
+import './CategoryOffert.css'
 
 const Good = (props) =>{
     return(
-        <Link to={"/offer/" + props.IDgoods
-        
-        } style={{ textDecoration: 'none' }}>
-            <Form>
-                <Photo>
-                    <img width="100%" max-height = "200px"  src={props.photo} />
-                </Photo>
-                <InfoContainer>
-                    <Title>{props.title}</Title>
-                    <Subtitle>{props.who}</Subtitle>
-                    <Subtitle>{props.where}</Subtitle>
-                </InfoContainer>
-            </Form>
+        <Link className='offer-link' to={"/offer/" + props.IDgoods}>
+            <div className='form'>
+                <div className='photo-container'>
+                    <img className='photo' src={props.photo} />
+                </div>
+                <div className='info-container'>
+                    <h1>{props.title}</h1>
+                    <h2>Kontakt: {props.who}</h2>
+                    <h2>Lokalizacja: {props.where}</h2>
+                </div>
+            </div>
         </Link>
     )
 }
@@ -184,37 +68,34 @@ const CategoryOffert = () =>{
 
     
     return (
-        <Container>
+        <div className="categoryoffert-container">
             <Header/>
-            <SearchBar>
-                <InputContainer>
-                    <Input
+            <div className="search-bar">
+                <div className="input-container">
+                    <input
                         placeholder="What are you looking for..."
                         onChange = {event => setSearch(event.target.value)}
                     />
-                </InputContainer>
+                </div>
 
-                <InputContainer>
-                    <Select
+                <div className="input-container">
+                    <select
                         onChange = {event => setVoivodeship(event.target.value)}>
                         {voivodeshipList.map((voivodeship) => (
                             <option value={voivodeship}>{voivodeship}</option>
                         ))}
-                    </Select>
-                </InputContainer>
+                    </select>
+                </div>
 
-                <Button to={{pathname:'/searchgoods/' + search + '/' + voivodeship}}>
+                <Link className="button" to={{pathname:'/searchgoods/' + search + '/' + voivodeship}}>
                     Search
-                </Button>
-            </SearchBar>
-
-            <ContentContainer>
+                </Link>
+            </div>
+            <div className="categoryoffert-content-container">
                 {goodsList}
 
-                
-            </ContentContainer>
-
-        </Container>
+            </div>
+        </div>
     );
     
 }

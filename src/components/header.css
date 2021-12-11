@@ -1,0 +1,66 @@
+.logo-container {
+    background-color: #444444;
+    width:100%;
+    display:flex;
+    justify-content: space-between;
+    padding: 15px 50px;
+    box-sizing: border-box;
+}
+
+
+.button-logo {
+    cursor: pointer;
+    color: #eee;
+    border-radius: 12px;
+    border: solid 2px #27ae60;
+}
+
+.button-logo:hover {
+    transform: scale(1.1)
+ }
+
+.button-logout {
+    cursor: pointer;
+    background-color: #27ae60;
+    border-radius: 12px;
+    box-sizing: border-box;
+    color: #eee;
+    font-size: 15px;
+    padding: 20px;
+}
+
+.button-logout:hover{
+    background-color: #1a8f4b;
+}
+
+
+.buttons {
+    align-self: center;
+    justify-content: flex-end;
+    display: flex;
+    flex: 0 0 80%;
+}
+
+.buttons * {
+    margin-left: 20px;
+}
+
+
+img {
+    width: 65px;
+}
+
+.button {
+    cursor: pointer;
+    background-color: #27ae60;
+    border-radius: 12px;
+    box-sizing: border-box;
+    color: #eee;
+    font-size: 15px;
+    padding: 20px;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #1a8f4b;
+}

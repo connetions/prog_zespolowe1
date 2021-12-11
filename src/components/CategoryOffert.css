@@ -1,0 +1,44 @@
+.categoryoffert-container {
+    /*background-color: #DDDDDD;*/
+    color: #444444;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.categoryoffert-content-container {
+    max-width: 800px;
+    background-color:white;
+    margin: auto;
+    width: 100%;
+    height: 80%;
+}
+
+.offer-link {
+    text-decoration: none;
+}
+
+.form {
+    background-color: #DDDDDD;
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.photo-container {
+    margin-right: 30px;
+}
+
+.photo {
+    width: 100%;
+    max-width: 200px;
+    max-height: 200px;
+    /*padding-right: 30px;*/
+}
+
+h1 {
+    text-decoration: none;
+}
