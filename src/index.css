@@ -78,9 +78,60 @@ select:focus {
   border: 2px solid #27ae60;
 }
 
-@media screen and (max-width: 620px){
+.col1, .col2 {
+  width: 50%;
+  box-sizing: border-box;
+}
+
+.announcement {
+  display: flex;
+}
+
+.announcement:first-child {
+  margin-right: 20px;
+}
+
+@media screen and (max-width: 740px){
   /*media query dla listy kategorii*/
   .category-container {
     flex-direction: column !important;
+  }
+
+  .user-info {
+    padding-bottom: 40px;
+    margin: 0 auto;
+  }
+  .user-info-container {
+    flex-direction: column !important;
+    padding-bottom: 40px !important;
+  }
+
+  .info-container {
+    margin: 0 auto;
+  }
+
+  .justify, .flex, .form, .announcement {
+    flex-direction: column;
+  }
+
+  .myacc-photo-container, .photo-container {
+    padding-right: 0 !important;
+  }
+
+  .myacc-photo-container img, .photo-container img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+
+  .logo-container {
+    padding: 15px !important;
+  }
+
+  .col1, .col2 {
+    width: 100% !important;
+  }
+
+  .col1 {
+    margin-bottom: 20px !important;
   }
 }

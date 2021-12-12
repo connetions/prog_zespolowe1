@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 
 
 const Container = styled.div`
-    background-color: #DDDDDD;
     color: #444444;
     margin: auto;
     width: 100%;
@@ -24,11 +23,9 @@ const LogoContainer = styled.div`
 `
 const ContentContainer = styled.div`
     background-color:white;
-    padding-top:5%;
-    margin: auto;
     width: 100%;
-    height: 80%;
-    clear:both;
+    height: 100%;
+    margin: 84px auto 0;
 `
 const Form = styled.div`
     border-radius: 4px;
@@ -43,6 +40,7 @@ const Title = styled.div`
     font-size: 36px;
     font-weight: 600;
     margin-top: 30px;
+    text-align: center;
 `
 const Subtitle = styled.div`
     font-family: sans-serif;
@@ -78,7 +76,6 @@ const Button = styled.div`
     border: 0;
     box-sizing: border-box;
     color: #eee;
-    cursor: pointer;
     font-size: 18px;
     height: 50px;
     margin-top: 16px;
@@ -176,9 +173,9 @@ const Register = () => {
     else {
         return (
             <Container>
-                <LogoContainer>
-                            
-                </LogoContainer>
+                {/*<LogoContainer>*/}
+                {/*            */}
+                {/*</LogoContainer>*/}
 
                 <ContentContainer>
                     <Form>

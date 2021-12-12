@@ -19,15 +19,10 @@ const Container = styled.div`
 const LogoContainer = styled.div`
     height: 100px;
     width: 800px;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto 0;
 `
 const ContentContainer = styled.div`
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 2%;
+    margin: 100px auto 0;
 `
 const Form = styled.div`
     border-radius: 4px;
@@ -263,13 +258,13 @@ const AddGoods = () =>{
     else{
         return (
             <Container>
-                <LogoContainer>
+                {/*<LogoContainer>*/}
 
-                    {/* <Link to="/" style={{ textDecoration: 'none' }}>
-                        <Img src={logo} alt="Logo" />
-                    </Link> */}
+                {/*    <Link to="/" style={{ textDecoration: 'none' }}>*/}
+                {/*        <Img src={logo} alt="Logo" />*/}
+                {/*    </Link>*/}
 
-                </LogoContainer>
+                {/*</LogoContainer>*/}
 
                 <ContentContainer>
                     <Form>

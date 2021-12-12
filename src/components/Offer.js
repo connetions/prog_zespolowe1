@@ -13,6 +13,7 @@ const Container = styled.div`
   margin: 50px auto 0;
   max-width: 800px;
   box-sizing: border-box;
+  padding: 0 20px;
 `
 
 const ContentContainer = styled.div`
@@ -37,6 +38,7 @@ const Description = styled.div`
   font-family: sans-serif;
   font-size: 16px;
   font-weight: 600;
+  margin-bottom: 5px;
 
 `
 const Subtitle = styled.div`
@@ -105,25 +107,24 @@ const Buttons = styled.div`
   background-color: #DDD;
   border-radius: 20px;
   box-sizing: border-box;
-  display: flex;
+  //display: flex;
   justify-content: space-between;
+
+  
 `
 
-const Send = styled.a`
+const Send = styled.div`
   color: #eee;
   text-transform: uppercase;
   padding: 10px;
   font-weight: 600;
-  background-color: #15172b;
+  background-color: #444;
   border-radius: 10px;
   flex: 0 0 47%;
   text-align: center;
   box-sizing: border-box;
-
-  :hover {
-    cursor: pointer;
-    background-color: #eee;
-    color: #15172b;
+  :first-child {
+    margin-bottom: 20px;
   }
 `
 
@@ -180,14 +181,14 @@ const Offer = () => {
                         <img src={good.photo}/>
                     </Photo>
 
-                    <Announcement>
-                        <Col1>
+                    <div className='announcement'>
+                        <div className='col1'>
                             <InfoContainer>
                                 <Title>
                                     {good.title}
                                 </Title>
                                 <Description>
-                                    Opis:
+                                    Description:
                                 </Description>
                                 <Subtitle>
                                     {good.description}
@@ -195,34 +196,33 @@ const Offer = () => {
                                 </Subtitle>
 
                             </InfoContainer>
-                        </Col1>
+                        </div>
 
-                        <Col2>
+                        <div className='col2'>
                             <UserInfo>
+                                <Description>
+                                    Announcements info:
+                                </Description>
                                 <Title>
                                     {userData.name + ' ' + userData.surname}
                                 </Title>
                                 <SubtitleSeller>
                                     {good.date}
                                 </SubtitleSeller>
-                                <SubtitleSeller>
-                                    {good.voivodeship}, Polska
-                                    <bt/>
-                                    {good.where}
-                                </SubtitleSeller>
+                                <SubtitleSeller>{good.where}, {good.voivodeship}, Polska</SubtitleSeller>
                             </UserInfo>
 
                             <Buttons>
                                 <Send>
-                                    {userData.phone}
+                                    Phone number: {userData.phone}
                                 </Send>
                                 <Send>
-                                    {userData.email}
+                                    Email: {userData.email}
                                 </Send>
                             </Buttons>
-                        </Col2>
+                        </div>
 
-                    </Announcement>
+                    </div>
 
                 </ContentContainer>
 

@@ -14,17 +14,10 @@ const Container = styled.div`
     text-align: center;
 `
 const LogoContainer = styled.div`
-    height: 100px;
-    width: 800px;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 `
 const ContentContainer = styled.div`
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 2%;
+    
 `
 const Form = styled.div`
     border-radius: 4px;
@@ -73,7 +66,6 @@ const Button = styled.div`
     border: 0;
     box-sizing: border-box;
     color: #eee;
-    cursor: pointer;
     font-size: 18px;
     height: 50px;
     margin-top: 16px;
@@ -89,7 +81,6 @@ const Button = styled.div`
 
 const Img = styled.img`
     width: 80px;
-    margin-left:4%;
 `
 
 
@@ -114,7 +105,7 @@ const Login = () =>{
     
     if(user){
         return <MainApp />     
-    } 
+    }
     else{
         return (
             <Container>

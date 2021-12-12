@@ -10,7 +10,7 @@
 .categoryoffert-content-container {
     max-width: 800px;
     background-color:white;
-    margin: auto;
+    margin: 50px auto;
     width: 100%;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .photo-container {
-    margin-right: 30px;
+    padding-right: 30px;
 }
 
 .photo {

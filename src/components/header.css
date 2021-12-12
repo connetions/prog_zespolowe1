@@ -42,7 +42,11 @@
 }
 
 .buttons * {
-    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.button:last-child {
+    margin-right: 0;
 }
 
 
@@ -64,3 +68,5 @@
 .button:hover {
     background-color: #1a8f4b;
 }
+
+

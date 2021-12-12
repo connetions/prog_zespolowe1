@@ -9,9 +9,8 @@ import { Link } from 'react-router-dom';
 
 
 const Container = styled.div`
-    background-color: #DDDDDD;
     color: #444444;
-    margin: auto;
+    margin: 84px auto 0;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -20,15 +19,11 @@ const LogoContainer = styled.div`
     background-color: white;
     width:100%;
     height:10%;
-    clear:both;
 `
 const ContentContainer = styled.div`
     background-color:white;
-    padding-top:5%;
     margin: auto;
     width: 100%;
-    height: 80%;
-    clear:both;
 `
 const Form = styled.div`
     border-radius: 4px;
@@ -108,9 +103,9 @@ class AfterRegister extends Component{
     render(){
         return(
             <Container>
-                <LogoContainer>
-        
-                </LogoContainer>
+                {/*<LogoContainer>*/}
+
+                {/*</LogoContainer>*/}
             
                 <ContentContainer>
                     <Form>
@@ -188,9 +183,9 @@ const EditUser = () => {
     else {
         return (
             <Container>
-                <LogoContainer>
-                            
-                </LogoContainer>
+                {/*<LogoContainer>*/}
+                {/*            */}
+                {/*</LogoContainer>*/}
 
                 <ContentContainer>
                     <Form>
