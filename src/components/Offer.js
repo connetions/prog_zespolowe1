@@ -2,46 +2,30 @@ import React, {Component, useState, useEffect} from 'react'
 import {onAuthStateChanged, signOut} from '@firebase/auth';
 import './Login.css';
 import {auth, db} from "../firebase-config"
-// import {collection, getDocs, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
 import styled from "styled-components"
 import {useLocation, useParams, Link} from 'react-router-dom';
-import {collection, getDocs, where, query, getDoc, doc} from "firebase/firestore";
+import {getDoc, doc} from "firebase/firestore";
 import Header from "./Header";
 
 
 const Container = styled.div`
-  // background-color: aqua;
-  margin: auto;
+  
+  margin: 50px auto 0;
   max-width: 800px;
   box-sizing: border-box;
-  //text-align: center;
 `
 
 const ContentContainer = styled.div`
-  // background-color:darkgreen;
-  margin: auto;
-  background-color: #15172b;
+  background-color: #444;
   border-radius: 20px;
   box-sizing: border-box;
   padding: 20px;
-  //height: 500px
-`
-const Form = styled.div`
-  margin: auto auto 20px;
-  background-color: #123456;
-  border-radius: 20px;
-  box-sizing: border-box;
-  padding: 20px;
-  width: 400px;
-  height: 150px;
   display: flex;
-
-  :last-child {
-    margin-bottom: 0;
-  }
+  flex-direction: column;
 `
+
 const Title = styled.div`
-  color: #eee;
+  color: black;
   font-family: sans-serif;
   font-size: 20px;
   font-weight: 600;
@@ -49,14 +33,14 @@ const Title = styled.div`
 
 `
 const Description = styled.div`
-  color: #eee;
+  color: #444;
   font-family: sans-serif;
   font-size: 16px;
   font-weight: 600;
 
 `
 const Subtitle = styled.div`
-  color: #eee;
+  color: #444;
   font-family: sans-serif;
   font-size: 16px;
   font-weight: 500;
@@ -69,7 +53,7 @@ const Subtitle = styled.div`
 `
 
 const SubtitleSeller = styled.div`
-  color: #eee;
+  color: black;
   font-family: sans-serif;
   font-size: 16px;
   font-weight: 500;
@@ -78,14 +62,15 @@ const SubtitleSeller = styled.div`
 `
 const Photo = styled.div`
   margin-bottom: 20px;
-
+  justify-content: center;
+  display: flex;
   img {
-    max-width: 100%;
+    width: 100%;
   }
 `
 const InfoContainer = styled.div`
   padding: 20px;
-  background-color: #123456;
+  background-color: #DDD;
   border-radius: 20px;
   margin-right: 20px;
   box-sizing: border-box;
@@ -93,7 +78,7 @@ const InfoContainer = styled.div`
 
 const UserInfo = styled.div`
   padding: 20px;
-  background-color: #123456;
+  background-color: #DDD;
   border-radius: 20px;
   box-sizing: border-box;
   margin-bottom: 20px;
@@ -117,7 +102,7 @@ const Announcement = styled.div`
 
 const Buttons = styled.div`
   padding: 20px;
-  background-color: #123456;
+  background-color: #DDD;
   border-radius: 20px;
   box-sizing: border-box;
   display: flex;
