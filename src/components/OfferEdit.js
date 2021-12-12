@@ -5,7 +5,7 @@ import { auth, db, storage} from "../firebase-config"
 import { Navigate } from 'react-router-dom';
 import {doc,collection,  addDoc, updateDoc, arrayUnion, getDoc,  } from "@firebase/firestore";
 import styled from "styled-components"
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import logo from '../logo.png';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
@@ -111,6 +111,7 @@ const Img = styled.img`
 `
 
 class AfterAdd extends Component{
+
     state = {
         cnt: 5
     }
@@ -121,21 +122,22 @@ class AfterAdd extends Component{
     }
 
     countDown = () => this.setState({cnt: this.state.cnt - 1})
+
     componentWillUnmount = () => clearInterval(this.state.intervalId)
 
     render(){
         return(
             <Container>
                 <LogoContainer>
-                    Logo
+                
                 </LogoContainer>
             
                 <ContentContainer>
                     <Form>
-                        <Title> Thank you for add good! </Title>
+                        <Title> Edited </Title>
                         <Subtitle>For {this.state.cnt} second you will navigate to Main </Subtitle>
-                            {this.state.cnt === 0 && <Navigate to ='/' />}
-                    </Form>
+                        {this.state.cnt === 0 && <Navigate to ='/' />}
+                        </Form>
                 </ContentContainer>
                 
             </Container>
@@ -143,13 +145,14 @@ class AfterAdd extends Component{
     }
 }
 
-const AddGoods = () =>{
+const OfferEdit = () =>{
 
     let imgUrl = ""
-    const [goodsName, setGoodsName] = useState();
-    const [description, setDescription] = useState();
+    const { IDoffert } = useParams()
+    const [goodsName, setGoodsName] = useState("");
+    const [description, setDescription] = useState("");
     const [img, setImg] = useState(null);
-    const [where, setWhere] = useState();
+    const [where, setWhere] = useState("");
     const [user, setUser] = useState({});
     const [flag, setFlag] = useState(false);
     const [userInfo, setUserInfo] = useState({});
@@ -170,8 +173,10 @@ const AddGoods = () =>{
         setImg(file);
     };
 
+
     useEffect(() => {
         const fetchUser = async () =>{
+            
             if (typeof user.uid !== "undefined"){
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef); 
@@ -179,11 +184,11 @@ const AddGoods = () =>{
                     const userData = docSnap.data();
                     setUserInfo(userData)
                     console.log("Document data:", userData); 
-                } 
-                else{
+                } else {
                     console.log("No such docsument!");
                 }
             }
+            
         }
         fetchUser();
       }, [user])
@@ -220,41 +225,18 @@ const AddGoods = () =>{
     }
 
     const addGoods = async () => {
-        let today = new Date();
-        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        let dateTime = date + ' ' + time;
-        try{           
-            try{
-                const docRef = await addDoc(collection(db, "goods"), {
-                        photo:imgUrl,
-                        title:goodsName,
-                        where: where,
-                        description: description,
-                        voivodeship: voivodeship,
-                        who: user.email,
-                        category: category,
-                        uid:user.uid,
-                        date: dateTime,
-                        name: userInfo.name,
-                        surname: userInfo.surname,
-                        phone: userInfo.phone,
-                        email: userInfo.email
-                        
-                    });
 
-                console.log("Document written with ID: ", docRef.id);
-
-                const goodRef = doc(db, "goods", docRef.id);
-                await updateDoc(goodRef, {
-                    goodid: docRef.id
-                });
-            } catch(error) {
-                console.error("Error adding document: ", error);
-            }
-        } catch(error) {
-            console.log(error.message);
-        }
+        const goodRef = doc(db, "goods", IDoffert);
+            await updateDoc(goodRef, {
+                photo:imgUrl,
+                title:goodsName,
+                where: where,
+                description: description,
+                voivodeship: voivodeship,
+                category: category,
+                
+            });
+            
     };
 
     if(flag){
@@ -265,15 +247,15 @@ const AddGoods = () =>{
             <Container>
                 <LogoContainer>
 
-                    {/* <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Link to="/" style={{ textDecoration: 'none' }}>
                         <Img src={logo} alt="Logo" />
-                    </Link> */}
+                    </Link>
 
                 </LogoContainer>
 
                 <ContentContainer>
                     <Form>
-                        <Title> Add Good </Title>
+                        <Title> Edit Good </Title>
                         
                         <InputContainer>
                             <Input 
@@ -322,7 +304,7 @@ const AddGoods = () =>{
                             />
                         </InputContainer>
 
-                        <Button onClick = {uploadFiles}> Add goods </Button>
+                        <Button onClick = {uploadFiles}> Edit goods</Button>
 
                         <Link to="/" style={{ textDecoration: 'none' }}>
                             <Button > Back to Main </Button>
@@ -336,4 +318,4 @@ const AddGoods = () =>{
     
 }
 
-export default AddGoods
+export default OfferEdit
