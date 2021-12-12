@@ -142,11 +142,17 @@ const Offer = () => {
         const fetchGood = async () => {
             const docRef = doc(db, "goods", IDoffert);
             const docSnap = await getDoc(docRef);
+            console.log(docSnap.data())
+
             if (docSnap.exists()) {
                 const goodData = docSnap.data();
                 setGood(goodData)
-                if (typeof user.uid !== "undefined") {  // pof f5 sie robi podwojnie 
-                    const docRef2 = doc(db, "users", user.uid);
+                console.log("Document data:", good);
+                console.log("SSS" + user.uid)
+
+
+                if (typeof user.uid !== "undefined") {  // pof f5 sie robi podwojnie
+                    const docRef2 = doc(db, "goods", IDoffert);
                     const docSnap2 = await getDoc(docRef2);
                     if (docSnap2.exists()) {
                         const usrData = docSnap2.data();
