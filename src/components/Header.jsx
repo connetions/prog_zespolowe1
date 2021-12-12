@@ -19,9 +19,10 @@ class Header extends React.Component {
                     <img src={logo} alt="Logo" />
                 </Link>
                 <div className="buttons">
-
-                    <a className="button-logout" onClick = {logout}> Sign Out </a>
-
+                    <Link className="button" to="/" onClick = {logout}>
+                         Sign Out
+                    </Link>
+                    
                     <Link className="button" to="/addgoods" >
                         Add Goods
                     </Link>

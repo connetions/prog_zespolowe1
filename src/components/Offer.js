@@ -1,11 +1,11 @@
-import React, {Component, useState, useEffect} from 'react'
+import React, { useState, useEffect} from 'react'
 import {onAuthStateChanged, signOut} from '@firebase/auth';
 import './Login.css';
 import {auth, db} from "../firebase-config"
-// import {collection, getDocs, addDoc, updateDoc, deleteDoc, doc} from "firebase/firestore";
+
 import styled from "styled-components"
-import {useLocation, useParams, Link} from 'react-router-dom';
-import {collection, getDocs, where, query, getDoc, doc} from "firebase/firestore";
+import { useParams,} from 'react-router-dom';
+import { getDoc, doc} from "firebase/firestore";
 import Header from "./Header";
 
 
@@ -149,50 +149,32 @@ const Offer = () => {
     const [user, setUser] = useState({});
     const [userData, setUserData] = useState({});
 
-    const logout = async () => {
-        await signOut(auth)
-
-    };
     onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser)
     })
 
     useEffect(() => {
-        console.log(IDoffert);
         const fetchGood = async () => {
             const docRef = doc(db, "goods", IDoffert);
             const docSnap = await getDoc(docRef);
-
             if (docSnap.exists()) {
                 const goodData = docSnap.data();
                 setGood(goodData)
-                console.log("Document data:", good);
-                console.log("SSS" + user.uid)
-
-
                 if (typeof user.uid !== "undefined") {  // pof f5 sie robi podwojnie 
                     const docRef2 = doc(db, "users", user.uid);
                     const docSnap2 = await getDoc(docRef2);
-
                     if (docSnap2.exists()) {
                         const usrData = docSnap2.data();
                         setUserData(usrData)
                         console.log("Document data2:", usrData);
                     } else {
-                        // doc.data() will be undefined in this case
                         console.log("No such document!");
                     }
                 }
-
-
             } else {
-                // doc.data() will be undefined in this case
                 console.log("No such document!");
             }
-
-
         }
-
         fetchGood();
     }, [user])
 

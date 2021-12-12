@@ -3,7 +3,7 @@ import './Login.css';
 import {auth, db} from "../firebase-config"
 import {collection, getDocs, where, query} from "firebase/firestore";
 import styled from "styled-components"
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Header from "./Header";
 
 

@@ -111,7 +111,6 @@ const Img = styled.img`
 `
 
 class AfterAdd extends Component{
-
     state = {
         cnt: 5
     }
@@ -122,7 +121,6 @@ class AfterAdd extends Component{
     }
 
     countDown = () => this.setState({cnt: this.state.cnt - 1})
-
     componentWillUnmount = () => clearInterval(this.state.intervalId)
 
     render(){
@@ -136,8 +134,8 @@ class AfterAdd extends Component{
                     <Form>
                         <Title> Thank you for add good! </Title>
                         <Subtitle>For {this.state.cnt} second you will navigate to Main </Subtitle>
-                        {this.state.cnt === 0 && <Navigate to ='/' />}
-                        </Form>
+                            {this.state.cnt === 0 && <Navigate to ='/' />}
+                    </Form>
                 </ContentContainer>
                 
             </Container>
@@ -148,12 +146,9 @@ class AfterAdd extends Component{
 const AddGoods = () =>{
 
     let imgUrl = ""
-    // const [imgUrl, setImgUrl] = useState();
-    const [fileUrl, setFileUrl] = useState('');
     const [goodsName, setGoodsName] = useState();
     const [description, setDescription] = useState();
     const [img, setImg] = useState(null);
-    const [progress, setProgress] = useState(0);
     const [where, setWhere] = useState();
     const [user, setUser] = useState({});
     const [flag, setFlag] = useState(false);
@@ -172,44 +167,34 @@ const AddGoods = () =>{
     const formHandler = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
-        // console.log(file.name)
         setImg(file);
     };
 
-
     useEffect(() => {
         const fetchUser = async () =>{
-            
             if (typeof user.uid !== "undefined"){
-               const docRef = doc(db, "users", user.uid);
-               const docSnap = await getDoc(docRef); 
-               if (docSnap.exists() && typeof user.uid !== "undefined") {
-                
-                const userData = docSnap.data();
-                setUserInfo(userData)
-                console.log("Document data:", userData); 
-                } else {
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef); 
+                if (docSnap.exists() && typeof user.uid !== "undefined") {
+                    const userData = docSnap.data();
+                    setUserInfo(userData)
+                    console.log("Document data:", userData); 
+                } 
+                else{
                     console.log("No such docsument!");
                 }
             }
-            
         }
         fetchUser();
       }, [user])
 
     const uploadFiles = () => {
+        setFlag(true);
         const storage = getStorage();
         const storageRef = ref(storage, 'images/' +img.name );
         const uploadTask = uploadBytesResumable(storageRef, img);
-
-        // Register three observers:
-        // 1. 'state_changed' observer, called any time the state changes
-        // 2. Error observer, called on failure
-        // 3. Completion observer, called on successful completion
         uploadTask.on('state_changed', 
         (snapshot) => {
-            // Observe state change events such as progress, pause, and resume
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log('Upload is ' + progress + '% done');
             switch (snapshot.state) {
@@ -222,11 +207,8 @@ const AddGoods = () =>{
             }
         }, 
         (error) => {
-            // Handle unsuccessful uploads
         }, 
         () => {
-            // Handle successful uploads on complete
-            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                 console.log('File available at'+ downloadURL); 
                 imgUrl = downloadURL;
@@ -241,10 +223,8 @@ const AddGoods = () =>{
         let today = new Date();
         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        let dateTime = date+' '+time;
+        let dateTime = date + ' ' + time;
         try{           
-            setFlag(true);
-            // console.log(user.uid);
             try{
                 const docRef = await addDoc(collection(db, "goods"), {
                         photo:imgUrl,
@@ -269,17 +249,12 @@ const AddGoods = () =>{
                 await updateDoc(goodRef, {
                     goodid: docRef.id
                 });
-            } catch (e) {
-            console.error("Error adding document: ", e);
+            } catch(error) {
+                console.error("Error adding document: ", error);
             }
-
-        } catch (error) {
+        } catch(error) {
             console.log(error.message);
         }
-    };
-
-    const logout = async () => {
-        await signOut(auth)
     };
 
     if(flag){
@@ -290,9 +265,9 @@ const AddGoods = () =>{
             <Container>
                 <LogoContainer>
 
-                    <Link to="/" style={{ textDecoration: 'none' }}>
+                    {/* <Link to="/" style={{ textDecoration: 'none' }}>
                         <Img src={logo} alt="Logo" />
-                    </Link>
+                    </Link> */}
 
                 </LogoContainer>
 
@@ -347,7 +322,7 @@ const AddGoods = () =>{
                             />
                         </InputContainer>
 
-                        <Button onClick = {uploadFiles}> Add goods</Button>
+                        <Button onClick = {uploadFiles}> Add goods </Button>
 
                         <Link to="/" style={{ textDecoration: 'none' }}>
                             <Button > Back to Main </Button>

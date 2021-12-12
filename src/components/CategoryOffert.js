@@ -70,7 +70,7 @@ const CategoryOffert = () =>{
     return (
         <div className="categoryoffert-container">
             <Header/>
-            <div className="search-bar">
+            {/* <div className="search-bar">
                 <div className="input-container">
                     <input
                         placeholder="What are you looking for..."
@@ -90,7 +90,7 @@ const CategoryOffert = () =>{
                 <Link className="button" to={{pathname:'/searchgoods/' + search + '/' + voivodeship}}>
                     Search
                 </Link>
-            </div>
+            </div> */}
             <div className="categoryoffert-content-container">
                 {goodsList}
 

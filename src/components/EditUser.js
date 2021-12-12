@@ -1,9 +1,9 @@
 import React, {Component, useState, useEffect} from 'react'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signOut , } from '@firebase/auth';
+import {onAuthStateChanged } from '@firebase/auth';
 import './Login.css';
 import { auth, db } from "../firebase-config"
 import { Navigate } from 'react-router-dom';
-import { setDoc, doc, getDoc, updateDoc} from "@firebase/firestore";
+import { doc, getDoc, updateDoc} from "@firebase/firestore";
 import styled from "styled-components"
 import { Link } from 'react-router-dom';
 
@@ -103,7 +103,6 @@ class AfterRegister extends Component{
     }
 
     countDown = () => this.setState({cnt: this.state.cnt - 1})
-
     componentWillUnmount = () => clearInterval(this.state.intervalId)
 
     render(){
@@ -116,10 +115,8 @@ class AfterRegister extends Component{
                 <ContentContainer>
                     <Form>
                         <Title> Edited </Title>
-                        
                         <Subtitle>For {this.state.cnt} second you will navigate to main </Subtitle>
                         {this.state.cnt === 0 && <Navigate to ='/' />}
-
                     </Form>
                 </ContentContainer>
                 
@@ -129,9 +126,7 @@ class AfterRegister extends Component{
 }
 
 const EditUser = () => {
-    
-    const [registerEmail, setRegisterEmail] = useState();
-    const [registerPassword, setRegisterPassword] = useState();
+
     const [name, setName] = useState('undefined');
     const [surname, setSurname] = useState('undefined');
     const [user, setUser] = useState();
@@ -139,7 +134,6 @@ const EditUser = () => {
     const [flag, setFlag] = useState(false);
     const [userInfo, setUserInfo] = useState({});
 
-    
     onAuthStateChanged(auth, (currentUser) =>{
         setUser(currentUser) 
     })
@@ -147,17 +141,17 @@ const EditUser = () => {
     useEffect(() => {
         if(user){
             const fetchUser = async () =>{
-                
                 if (typeof user.uid !== "undefined"){
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef); 
-                if (docSnap.exists() && typeof user.uid !== "undefined") {
-                    
-                    const userData = docSnap.data();
-                    setUserInfo(userData)
-                    console.log("Document data:", userData); 
-                    } else {
-                        console.log("No such docsument!");
+                    const docRef = doc(db, "users", user.uid);
+                    const docSnap = await getDoc(docRef); 
+
+                    if (docSnap.exists() && typeof user.uid !== "undefined") {
+                        const userData = docSnap.data();
+                        setUserInfo(userData)
+                        console.log("Document data:", userData); 
+                    } 
+                    else {
+                        console.log("No such document!");
                     }
                 }
                 
@@ -170,7 +164,6 @@ const EditUser = () => {
     const edit = async () => {
         
         if ( name === "undefined"){
-            console.log("XD")
             setName(userInfo.name)
         }
         if ( surname === "undefined"){
@@ -186,7 +179,7 @@ const EditUser = () => {
                 phone: phone
             });
 
-            setFlag( true)
+        setFlag( true)
     };
 
     if (flag) {
@@ -203,7 +196,6 @@ const EditUser = () => {
                     <Form>
                         <Title> Edit User </Title>
                         
-
                         <InputContainer>
                             <Input 
                                 placeholder={userInfo.name }

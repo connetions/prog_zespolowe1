@@ -4,7 +4,7 @@ import './Login.css';
 import {auth, db} from "../firebase-config"
 import {collection, getDocs, where, query, getDoc, doc, deleteDoc} from "firebase/firestore";
 import styled from "styled-components"
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Header from "./Header";
 
 
@@ -101,54 +101,39 @@ const OffertInfo = styled.div`
 
 const Good = (props) =>{
     const deleteGood = async () => {
-        console.log(props.gooduid)
         await deleteDoc(doc(db, "goods", props.gooduid));
         window.location.reload(false);
     }
 
     return(
-        
             <Form>
-                <Link to={"/offer/" + props.gooduid
-        
-                } style={{ textDecoration: 'none' }}>
+                <Link to={"/offer/" + props.gooduid} style={{ textDecoration: 'none' }}>
                     <Photo>
                         <img width="100%" max-height = "200px"  src={props.photo} />
                     </Photo>
                 </Link>
+
                 <InfoContainer>
                     <Title>{props.title}</Title>
                     <Subtitle>{props.who}</Subtitle>
                     <Subtitle>{props.where}</Subtitle>
                     <Button onClick = {deleteGood}>Delete</Button>
                     <br/>
-                    <Link to={"/offeredit/" + props.gooduid
-        
-                } style={{ textDecoration: 'none' }}>
 
-                    <Button>edit</Button>
-                </Link>
+                    <Link to={"/offeredit/" + props.gooduid} style={{ textDecoration: 'none' }}>
+                        <Button>edit</Button>
+                    </Link>
                     
                 </InfoContainer>
-            </Form>
-        
+            </Form>  
     )
 }
 
 
 const MyAccount = () => {
 
-    // const auth = getAuth();
-    // const user = auth.currentUser;
-
-    const { category } = useParams()
     const [goods, setGoods] = useState([]);
     const [userInfo, setUserInfo] = useState({});
-    const voivodeshipList = ["Dolnośląskie", "Kujawsko-Pomorskie", "Lubelskie", "Lubuskie", "Łódzkie", "Małopolskie",
-                "Mazowieckie", "Opolskie", "Podkarpackie", "Podlaskie", "Pomorskie", "Śląskie", "Świętokrzyskie",
-                "Warmińsko-Mazurskie", "Wielkopolskie", "Zachodniopomorskie"];
-    const [voivodeship, setVoivodeship] = useState('');
-    const [search, setSearch] = useState('');
     const [user, setUser] = useState();
 
     const goodsList = goods.map( (good) => (  
@@ -162,43 +147,33 @@ const MyAccount = () => {
         />   
     )) 
     
-    const logout = async () => {
-        await signOut(auth)
-    
-    };
-
     onAuthStateChanged(auth, (currentUser) =>{
         setUser(currentUser.uid) 
     })
     
-    
-
     useEffect(() => {  
-        console.log(user)
         if(user){
             const fetchGoods = async () =>{
-                console.log("SSS" + auth.currentUser.uid)
+            
                 const querySnapshot = await getDocs(query(collection(db, "goods"), where("uid", "==", user)));
                 querySnapshot.forEach((doc) => {
                     setGoods(goods => [...goods, doc.data()])
-                console.log(doc.id, " => ", doc.data());
+                    console.log(doc.id, " => ", doc.data());
                 });
 
                 if (typeof auth.currentUser.uid !== "undefined"){
                     const docRef = doc(db, "users", auth.currentUser.uid);
                     const docSnap = await getDoc(docRef); 
                     if (docSnap.exists() && typeof auth.currentUser.uid !== "undefined") {
-                     
-                     const userData = docSnap.data();
-                     setUserInfo(userData)
-                     console.log("Document data:", userData); 
+                        const userData = docSnap.data();
+                        setUserInfo(userData)
+                        console.log("Document data:", userData); 
                      } else {
-                         console.log("No such docsument!");
+                        console.log("No such docsument!");
                      }
                  }
             }
 
-            
             fetchGoods();
         }else{
             console.log("Serror here")
@@ -210,14 +185,14 @@ const MyAccount = () => {
             <Header/>
             <ContentContainer>
                 <UserInfo>
-                {userInfo.name + '' + userInfo.surname}
-                <br/>
-                {userInfo.email}
-                
-                {userInfo.phone}
-                <Link to="/edituser" style={{ textDecoration: 'none' }}>
-                    <Button > Edit USer </Button>
-                </Link>
+                    {userInfo.name + '' + userInfo.surname}
+                    <br/>
+                    {userInfo.email}
+                    
+                    {userInfo.phone}
+                    <Link to="/edituser" style={{ textDecoration: 'none' }}>
+                        <Button > Edit USer </Button>
+                    </Link>
                 </UserInfo>
 
                 <OffertInfo>

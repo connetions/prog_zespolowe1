@@ -100,18 +100,12 @@ const Login = () =>{
     const [loginPassword, setLoginPassword] = useState();
     const [user, setUser] = useState({});
 
-
     const login = async () => {
         try {
-            await signInWithEmailAndPassword(
-                auth,
-                loginEmail,
-                loginPassword
-                );
+            await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
         } catch (error) {
             console.log(error.message);
         }
-        
     };
 
     onAuthStateChanged(auth, (currentUser) =>{
@@ -120,7 +114,8 @@ const Login = () =>{
     
     if(user){
         return <MainApp />     
-    } else{
+    } 
+    else{
         return (
             <Container>
                 <LogoContainer>
@@ -133,7 +128,6 @@ const Login = () =>{
                 
                     <Form>
                         <Title> Welcome </Title>
-
                         <Subtitle> Let's go sign in! </Subtitle>
 
                         <InputContainer>
